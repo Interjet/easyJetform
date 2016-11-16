@@ -1,0 +1,21 @@
+form label{
+	position: relative;
+}
+.invalid label, label.invalid{
+	color:#ad0000;
+}
+.invalid .invalid-text:before{
+	content:' - ';
+}
+.invalid .invalid-text{
+	margin-right: 0;
+}
+.invalid input, .invalid select{
+	border:1px solid #ad0000;
+	box-shadow: 0 0 5px rgba(173, 0, 0, .5);
+	color:#ad0000;
+}
+.invalid input[type="checkbox"],.invalid input[type="radio"]{
+	border:none;
+	box-shadow:none;
+}

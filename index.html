@@ -1,0 +1,99 @@
+<!doctype html>
+
+<html lang="he">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>easyJetform</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//cdn.rawgit.com/morteza/bootstrap-rtl/v3.3.4/dist/css/bootstrap-rtl.min.css">
+	<script src="jetform.js"></script>
+	<link rel="stylesheet" href="jetform.css">
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<form id="jetform" novalidate>
+					<div class="form-group">
+						<label for="firstName">שם פרטי</label>
+						<input class="form-control" required id="firstName" type="text" name="jf_txt_1">
+					</div>
+					<div class="form-group">
+						<label for="lastName">שם משפחה</label>
+						<input class="form-control" id="lastName" type="text" name="jf_txt_2">
+					</div>
+					<div class="form-group">
+						<label for="emailInput">כתובת מייל</label>
+						<input class="form-control" id="emailInput" required type="email" name="jf_txt_3">
+					</div>
+					<div class="form-group">
+						<label for="telInput">טלפון</label>
+						<input class="form-control" id="telInput" required maxlength="11" type="tel" name="jf_txt_4">
+					</div>
+					
+					<div class="form-group">
+						<label for="selectInput">תבחר מספר</label>
+						<select id="selectInput" required name="jf_combo_7" class="form-control">
+							<option value="" selected disabled>בחר</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+						</select>
+					</div>
+
+					<div class="checkbox">
+						<label>
+							<input id="jf_chk_5" required type="checkbox" name="jf_chk_5"> זה חובה
+						</label>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input id="jf_chk_6" type="checkbox" name="jf_chk_6"> זה לא
+						</label>
+					</div>
+
+					<div class="radio">
+						<label>
+							<input type="radio" name="jf_rdb_8" id="optionsRadios1" value="כחול" required>
+							גלולה כחולה
+						</label>
+					</div>
+					<div class="radio">
+						<label>
+							<input type="radio" name="jf_rdb_8" id="optionsRadios2" value="אדום" required>
+							גלולה אדומה
+						</label>
+					</div>
+
+					<div class="radio">
+						<label>
+							<input type="radio" name="jf_rdb_9" id="optionsRadios3" value="כחול" required>
+							גלולה כחולה
+						</label>
+					</div>
+					<div class="radio">
+						<label>
+							<input type="radio" name="jf_rdb_9" id="optionsRadios4" value="אדום" required>
+							גלולה אדומה
+						</label>
+					</div>
+
+					<button type="submit" class="btn btn-default">שלח</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<script>
+	$(document).ready(function(){
+		$('#jetform').jetform({
+			token:'nZq6scKaNvcXdgjszIcN1kaHhbYDKjAAie0yPKyTVU4AiE0Aiv9VGKu0sH7fVqWhqEkRvUyhbApBpYRGmgPkZA=='
+		})
+	})
+	</script>
+</body>
+</html>
