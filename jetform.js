@@ -127,6 +127,16 @@
 				settings.onSubmit();
 				postCORS('http://jetform.interjet.co.il/lead/save', $.param(args), function(response){
 		            if(response.indexOf('success')>-1){
+		            	if(typeof dataLayer == 'object'){
+							var layer = $.extend(true, {'event':'jetform_submit_success'}, args);
+							$.each(['L','R','browser_next_url','campaign_content','campaign_medium','campaign_name','campaign_source','campaign_term','furl','source_referrer','token','use_browser'], function(i,v){
+								if(v in layer)
+									delete layer[v];
+							});
+							
+							dataLayer.push(layer);
+						}
+
 		                settings.onSuccess(args);
 		            }  else{
 		                settings.onFail();
