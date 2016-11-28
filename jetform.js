@@ -16,7 +16,8 @@
 			inCorrectEmail:"כתובת מייל לא תקינה",
 			sending:"שולח נתונים",
 			success:"הפרטים התקבלו בהצלחה",
-			fail:"ארעה שגיאה בזמן שליחת הנתונים"
+			fail:"ארעה שגיאה בזמן שליחת הנתונים",
+			unique: "ניתן להירשם פעם אחת בלבד"
 		}		
 
 		// default settings
@@ -28,8 +29,8 @@
 			onSuccess: function(args){
 				alert(errors.success);
 			},
-			onFail: function(){
-				alert(errors.fail);
+			onFail: function(error){
+				alert(error);
 			}
 		}, options)
 
@@ -126,10 +127,13 @@
 				// while submiting
 				settings.onSubmit();
 				postCORS('http://jetform.interjet.co.il/lead/save', $.param(args), function(response){
-		            if(response.indexOf('success')>-1){
+		            if(response.indexOf('success=true') >- 1){
 		                settings.onSuccess(args);
+		            }
+		            else if(response.indexOf('reason=unique') >- 1){
+		            	settings.onFail(errors.unique);
 		            }  else{
-		                settings.onFail();
+		                settings.onFail(errors.fail);
 		            }
 		        });
 			} else{
