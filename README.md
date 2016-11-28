@@ -4,7 +4,7 @@ Turn any static form to a Jetform with one line. [Demo](http://www.interjet.co.i
 
 ### Few Points
 
-- ```<form>``` need to have a ```novalidate``` attribute
+- ```<form>``` needs to have a ```novalidate``` attribute
 - Each input needs to have a ```name="..."``` attribute.
 - Each input needs to have a ```<label for="...">```.
 - A ```<div>``` needs to wrap the ```<label>``` and the ```<input>``` tags.
