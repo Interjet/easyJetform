@@ -23,7 +23,8 @@
 		// default settings
 		var settings = $.extend({
 			alertErrors: false,
-			onSubmit: function(){
+			submitLoader: false,
+			beforeSubmit: function(args){
 				console.log('שולח נתונים...');
 			},
 			onSuccess: function(args){
@@ -120,14 +121,18 @@
 				args[$(element).attr('name')] = $(element).val();
 			}) // end select validation
 
-
 			if(isValid){
 				// reset form
 				theForm.trigger('reset');
-				// while submiting
-				settings.onSubmit();
-				postCORS('http://jetform.interjet.co.il/lead/save', $.param(args), function(response){
-<<<<<<< HEAD
+				// before submiting
+				settings.beforeSubmit();
+				if(settings.submitLoader){
+					$('body').prepend('<div class="jetloader-wrapper"><div class="jetloader">שולח נתונים...</div></div>');
+				}
+				postCORS('//jetform.interjet.co.il/lead/save', $.param(args), function(response){
+					if(settings.submitLoader){
+						$('.jetloader-wrapper,.jetloader').remove();
+					}
 		            if(response.indexOf('success')>-1){
 		            	if(typeof dataLayer == 'object'){
 							var layer = $.extend(true, {'event':'jetform_submit_success'}, args);
@@ -138,10 +143,8 @@
 							
 							dataLayer.push(layer);
 						}
-
-=======
+					}
 		            if(response.indexOf('success=true') >- 1){
->>>>>>> refs/remotes/origin/unique-response
 		                settings.onSuccess(args);
 		            }
 		            else if(response.indexOf('reason=unique') >- 1){
@@ -151,14 +154,14 @@
 		            }
 		        });
 			} else{
-				$('.invalid').find('input')[0].focus();
+				$('.has-error').find('input')[0].focus();
 			}
 
 		}) // end submit
 	
 		// displaying error(alert/text)
 		function notValid(error, element){
-			$(element).parent().addClass('invalid');
+			$(element).parent().addClass('has-error');
 
 			if(settings.alertErrors){
 				if(error != 'שדה חובה'){
@@ -170,9 +173,9 @@
 			}
 			
 			if($(element).attr('type') == 'checkbox' || $(element).attr('type') == 'radio'){
-				$(element).parent().append(' <span class="invalid-text">' + error + '</span>');
+				$(element).parent().append(' <span class="has-error-text">' + error + '</span>');
 			} else{
-				$(element).parent().find('label').append('<span class="invalid-text">' + error + '</span>');
+				$(element).parent().find('label').append('<span class="has-error-text">' + error + '</span>');
 			}
 
 			return false;
@@ -180,31 +183,31 @@
 
 		// reset form from errors and values
 		function formReset(form){
-			form.find('.invalid').removeClass('invalid');
-			form.find('.invalid-text').remove();
+			form.find('.has-error').removeClass('has-error');
+			form.find('.has-error-text').remove();
 		}
 
 		// remove errors when typing
 		theForm.find('input').on('keyup',function(){
 		    if(!!$(this).val()){
-		        $(this).parent().removeClass('invalid');
-		        $(this).parent().find('.invalid-text').remove();
+		        $(this).parent().removeClass('has-error');
+		        $(this).parent().find('.has-error-text').remove();
 		    }
 		})
 		theForm.find('input[type="radio"],input[type="checkbox"]').on('change',function(){
 			if($(this).attr('type') == 'radio'){
 				var rdbName = $(this).attr('name');
-				$('input[name="' + rdbName + '"]').parent().removeClass('invalid');
+				$('input[name="' + rdbName + '"]').parent().removeClass('has-error');
 				$('input[name="' + rdbName + '"]').next().remove();
 			} else if(!!$(this).val()){
-		        $(this).parent().removeClass('invalid');
-		        $(this).parent().find('.invalid-text').remove();
+		        $(this).parent().removeClass('has-error');
+		        $(this).parent().find('.has-error-text').remove();
 		    }
 		})
 		theForm.find('select').on('change',function(){
 		    if(!!$(this).val()){
-		        $(this).parent().removeClass('invalid');
-		        $(this).parent().find('.invalid-text').remove();
+		        $(this).parent().removeClass('has-error');
+		        $(this).parent().find('.has-error-text').remove();
 		    }
 		})
 
