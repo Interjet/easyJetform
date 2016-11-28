@@ -15,6 +15,7 @@ submitLoader  | Boolean | Default false, if true a loader will jump while the de
 beforeSubmit | Function(args) | Default ```console.log('הפרטים נשלחו')```
 onSuccess | Function(args) | Default ```alert('הפרטים נשלחו')```.
 onFail | Function(error) | Default ```alert('השליחה נכשלה')```.
+
 ### Example
 ```
 $('#jetform').jetform({
