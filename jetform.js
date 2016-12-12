@@ -16,20 +16,23 @@
 			inCorrectEmail:"כתובת מייל לא תקינה",
 			sending:"שולח נתונים",
 			success:"הפרטים התקבלו בהצלחה",
-			fail:"ארעה שגיאה בזמן שליחת הנתונים"
+			fail:"ארעה שגיאה בזמן שליחת הנתונים",
+			unique: "ניתן להירשם פעם אחת בלבד"
 		}		
 
 		// default settings
 		var settings = $.extend({
 			alertErrors: false,
-			onSubmit: function(){
+			errorContainer: false,
+			submitLoader: false,
+			beforeSubmit: function(args){
 				console.log('שולח נתונים...');
 			},
 			onSuccess: function(args){
 				alert(errors.success);
 			},
-			onFail: function(){
-				alert(errors.fail);
+			onFail: function(error){
+				alert(error);
 			}
 		}, options)
 
@@ -44,6 +47,9 @@
             campaign_name: queryString('utm_campaign') || "",
             furl: document.location.href
 		}
+
+		if(!!settings.placeholders)
+			theForm.find('input, textarea, select').jetPlaceholder();
 
 		// On submit form
 		theForm.on('submit', function(e){
@@ -61,6 +67,7 @@
 				// if empty and required
 				if(!$.trim($(element).val()).length && !!$(element).attr('required')){
 					isValid = notValid(errors.required ,$(element));
+					if(!isValid) return false;
 					return;
 				} 
 
@@ -68,6 +75,7 @@
 				if($(element).attr('type') == 'tel'){
 					if($(element).val().length < 10){
 						isValid = notValid(errors.inCorrectPhone ,$(element));
+						if(!isValid) return false;
 						return;
 					}
 				}
@@ -76,6 +84,7 @@
 				if($(element).attr('type') == 'email'){
 					if($(element).val().length < 5 || $(element).val().indexOf('@') == -1){
 						isValid = notValid(errors.inCorrectEmail ,$(element));
+						if(!isValid) return false;
 						return;
 					}
 				}
@@ -84,6 +93,7 @@
 				if($(element).attr('type') == 'checkbox'){
 					if(!!$(element).attr('required') && !$(element).is(':checked')){
 						isValid = notValid(errors.checkboxRequired ,$(element));
+						if(!isValid) return false;
 						return;
 					}
 				}
@@ -93,6 +103,7 @@
 						var rdbName = $(element).attr('name');
 						if(!$('input[name="' + rdbName + '"]:checked').val()){
 							isValid = notValid(errors.radioRequired ,$(element));
+							if(!isValid) return false;
 							return;
 						}
 					}
@@ -119,42 +130,76 @@
 				args[$(element).attr('name')] = $(element).val();
 			}) // end select validation
 
-
 			if(isValid){
 				// reset form
 				theForm.trigger('reset');
-				// while submiting
-				settings.onSubmit();
-				postCORS('http://jetform.interjet.co.il/lead/save', $.param(args), function(response){
+
+				if(!!settings.placeholders)
+					theForm.find('input, textarea, select').jetPlaceholder();
+
+				// before submiting
+				settings.beforeSubmit();
+				if(settings.submitLoader){
+					$('body').prepend('<div class="jetloader-wrapper"><div class="jetloader">שולח נתונים...</div></div>');
+				}
+				postCORS('//jetform.interjet.co.il/lead/save', $.param(args), function(response){
+					if(settings.submitLoader){
+						$('.jetloader-wrapper,.jetloader').remove();
+					}
 		            if(response.indexOf('success')>-1){
+		            	if(typeof dataLayer == 'object'){
+							var layer = $.extend(true, {'event':'jetform_submit_success'}, args);
+							$.each(['L','R','browser_next_url','campaign_content','campaign_medium','campaign_name','campaign_source','campaign_term','furl','source_referrer','token','use_browser'], function(i,v){
+								if(v in layer)
+									delete layer[v];
+							});
+							
+							dataLayer.push(layer);
+						}
+					}
+		            if(response.indexOf('success=true') >- 1){
 		                settings.onSuccess(args);
+		            }
+		            else if(response.indexOf('reason=unique') >- 1){
+		            	settings.onFail(errors.unique);
 		            }  else{
-		                settings.onFail();
+		                settings.onFail(errors.fail);
 		            }
 		        });
 			} else{
-				$('.invalid').find('input')[0].focus();
+				$('.has-error').find('input')[0].focus();
 			}
 
 		}) // end submit
 	
 		// displaying error(alert/text)
 		function notValid(error, element){
-			$(element).parent().addClass('invalid');
+			element.parent().addClass('has-error');
 
 			if(settings.alertErrors){
 				if(error != 'שדה חובה'){
 					alert(error);
 				} else{
-					alert($(element).prev().text() + ' ' + error);
+					alert((element.prev().text() || element.data('name')) + ' ' + error);
 				}
 				return false;
 			}
 			
-			if($(element).attr('type') == 'checkbox' || $(element).attr('type') == 'radio'){
-				$(element).parent().append(' <span class="invalid-text">' + error + '</span>');
-			} else{
-				$(element).parent().find('label').append('<span class="invalid-text">' + error + '</span>');
+			if(!settings.errorContainer){
+				if(element.attr('type') == 'checkbox' || element.attr('type') == 'radio'){
+					element.parent().append(' <span class="has-error-text">' + error + '</span>');
+				} else{
+					element.parent().find('label').append('<span class="has-error-text">' + error + '</span>');
+				}
+			}
+			else {
+
+				if(error != 'שדה חובה'){
+					$(settings.errorContainer).text(error);
+				} else{
+					$(settings.errorContainer).text((element.prev().text() || element.data('name')) + ' ' + error);
+				}
+				return false;
 			}
 
 			return false;
@@ -162,31 +207,35 @@
 
 		// reset form from errors and values
 		function formReset(form){
-			form.find('.invalid').removeClass('invalid');
-			form.find('.invalid-text').remove();
+			form.find('.has-error').removeClass('has-error');
+			form.find('.has-error-text').remove();
+
+			if(!!settings.errorContainer){
+				$(settings.errorContainer).text('');
+			}
 		}
 
 		// remove errors when typing
 		theForm.find('input').on('keyup',function(){
 		    if(!!$(this).val()){
-		        $(this).parent().removeClass('invalid');
-		        $(this).parent().find('.invalid-text').remove();
+		        $(this).parent().removeClass('has-error');
+		        $(this).parent().find('.has-error-text').remove();
 		    }
 		})
 		theForm.find('input[type="radio"],input[type="checkbox"]').on('change',function(){
 			if($(this).attr('type') == 'radio'){
 				var rdbName = $(this).attr('name');
-				$('input[name="' + rdbName + '"]').parent().removeClass('invalid');
+				$('input[name="' + rdbName + '"]').parent().removeClass('has-error');
 				$('input[name="' + rdbName + '"]').next().remove();
 			} else if(!!$(this).val()){
-		        $(this).parent().removeClass('invalid');
-		        $(this).parent().find('.invalid-text').remove();
+		        $(this).parent().removeClass('has-error');
+		        $(this).parent().find('.has-error-text').remove();
 		    }
 		})
 		theForm.find('select').on('change',function(){
 		    if(!!$(this).val()){
-		        $(this).parent().removeClass('invalid');
-		        $(this).parent().find('.invalid-text').remove();
+		        $(this).parent().removeClass('has-error');
+		        $(this).parent().find('.has-error-text').remove();
 		    }
 		})
 
@@ -200,7 +249,8 @@
 	// queryString function
 	function queryString(a,b){var c="",d=[],e=[];c=b||decodeURIComponent(window.location.search.substring(1)),c.indexOf("&")==-1?d.push(c):d=c.split("&");for(var f=0;f<d.length;f++)if(e=d[f].split("="),e[0].toLowerCase()==a.toLowerCase())return e[1];return!1}
 	// Prevent letters in tel input
-}( jQuery ));
+	(function(window,$){$.fn.jetPlaceholder=function(){var isRegExpSupported=('RegExp'in window),isTestRegExpSupported=('test'in RegExp.prototype);$.each(this,function(index,element){if(!!$(element).attr('placeholder')){if(!!isRegExpSupported&&!!isTestRegExpSupported) _setStyleDirectionRegExp(element,$(element).attr('placeholder').substr(0,1));else _setStyleDirectionCharCode(element,$(element).attr('placeholder').substr(0,1));} $(element).keyup(function(e){if($(this).val().length>0){if(!!isRegExpSupported&&!!isTestRegExpSupported) _setStyleDirectionRegExp(this,$(this).val().substr(0,1));else _setStyleDirectionCharCode(this,$(this).val().substr(0,1));}else if(!$(this).val().length){if(!!$(element).attr('placeholder')){if(!!isRegExpSupported&&!!isTestRegExpSupported) _setStyleDirectionRegExp(this,$(this).attr('placeholder').substr(0,1));else _setStyleDirectionCharCode(this,$(this).attr('placeholder').substr(0,1));}}});});function _setStyleDirectionRegExp(element,char){var rtl='\u0591-\u07FF\uFB1D-\uFDFF\uFE70-\uFEFC',rx=new RegExp('['+rtl+']');if(rx.test(char)) $(element).css({'text-align':'right','direction':'rtl'});else $(element).css({'text-align':'left','direction':'ltr'});} function _setStyleDirectionCharCode(element,char){var CharCode=char.charCodeAt(0);if((CharCode>=1488&&CharCode<=1514)||(CharCode>=1570&&CharCode<=1747)) $(element).css({'text-align':'right','direction':'rtl'});else $(element).css({'text-align':'left','direction':'ltr'});} return this;}}(window,jQuery));}
+( jQuery ));
 
 $(document).ready(function(){
 	$("input[type='tel']").keydown(function (e) {
