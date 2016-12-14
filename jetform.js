@@ -68,7 +68,7 @@
 
 				// if too short
 				if($(element).attr('type') == 'tel'){
-					if($(element).val().length < 10){
+					if($(element).val().length < 9){
 						isValid = notValid(errors.inCorrectPhone ,$(element));
 						return;
 					}
