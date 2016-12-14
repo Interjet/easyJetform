@@ -190,11 +190,9 @@
 			$(element).parent().addClass('has-error');
 
 			if(!!settings.errorAtBottom){
-				if($(element).attr('type') == "checkbox" || $(element).attr('type') == "radio"){
+				if(error != 'שדה חובה'){
 					errorsArray.push(error);
-				} else if($(element).data('idnumber') == ""){
-					errorsArray.push(error);
-				}{
+				} else {
 					errorsArray.push($(element).prev().text() + ' ' + error);
 				}
 				return false;
