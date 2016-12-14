@@ -1,4 +1,4 @@
-/*! easyJetform - v1.1.0 - 14-12-2016  !*/
+/*! easyJetform - v1.1.1 - 14-12-2016  !*/
 
 (function($){
 	$.fn.jetform = function(options){
@@ -64,9 +64,9 @@
 			var isValid = true;
 
 			// going through all inputs
-			theForm.find('input').each(function(index, element){
+			theForm.find('input, select, textarea').each(function(index, element){
 				// skip submit and hidden inputs
-				if($(element).attr('type') == 'submit' || $(element).attr('type') == 'hidden'){
+				if($(element).attr('type') == 'submit'){
 					return;
 				}
 
@@ -122,6 +122,10 @@
 					}
 				}
 
+				// if($(element).prop('tagName') == "SELECT"){
+
+				// }
+
 				// if everything is ok insert to args object by the name attribute
 				if($(element).attr('type') == 'checkbox'){
 					args[$(element).attr('name')] = $(element).is(':checked')
@@ -132,22 +136,22 @@
 				}
 			}) // end input validation
 
-			theForm.find('select').each(function(index, element){
-				// if empty and required
-				if(!$.trim($(element).val()).length && !!$(element).attr('required')){
-					isValid = notValid(errors.required ,$(element));
-					return;
-				}
+			// theForm.find('select').each(function(index, element){
+			// 	// if empty and required
+			// 	if(!$.trim($(element).val()).length && !!$(element).attr('required')){
+			// 		isValid = notValid(errors.required ,$(element));
+			// 		return;
+			// 	}
 
-				// if everything is ok insert to args object by the name attribute
-				args[$(element).attr('name')] = $(element).val();
-			}) // end select validation
+			// 	// if everything is ok insert to args object by the name attribute
+			// 	args[$(element).attr('name')] = $(element).val();
+			// }) // end select validation
 
 			if(isValid){
-				// reset form
-				theForm.trigger('reset');
 				// before submiting
 				settings.beforeSubmit(args);
+				// reset form
+				theForm.trigger('reset');
 				if(settings.submitLoader){
 					$('body').prepend('<div class="jetloader-wrapper"><div class="jetloader">שולח נתונים...</div></div>');
 				}
@@ -177,7 +181,6 @@
 		        });
 			} else{
 				if(!!settings.errorAtBottom && errorsArray != []){
-					console.log(errorsArray);
 					theForm.append('<p class="error-msg">' + errorsArray[0] + '</p>')
 				}
 				$('.has-error').find('input, select')[0].focus();
@@ -252,7 +255,7 @@
 		}
 
 		// remove errors when typing
-		theForm.find('input').on('keyup',function(){
+		theForm.find('input, textarea').on('keyup',function(){
 		    if(!!$(this).val()){
 		        $(this).parent().removeClass('has-error');
 		        $(this).parent().find('.has-error-text').remove();

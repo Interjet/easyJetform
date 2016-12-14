@@ -22,7 +22,7 @@
 					</div>
 					<div class="form-group">
 						<label for="lastName">שם משפחה</label>
-						<input class="form-control" id="lastName" type="text" name="jf_txt_2">
+						<input class="form-control" required id="lastName" type="text" name="jf_txt_2">
 					</div>
 					<div class="form-group">
 						<label for="emailInput">כתובת מייל</label>
@@ -36,6 +36,12 @@
 						<label for="idInput">תעודת זהות</label>
 						<input class="form-control" id="idInput" data-idnumber type="number" name="jf_txt_9">
 					</div>
+					<div class="form-group">
+						<label for="textareaInput">שדה טקסט</label>
+						<textarea class="form-control" required name="jf_area_11" rows="5" id="textareaInput"></textarea>
+					</div>
+
+
 					
 					<div class="form-group">
 						<label for="selectInput">תבחר מספר</label>
@@ -86,6 +92,8 @@
 						</label>
 					</div>
 
+					<input type="hidden" name="jf_txt_10" value="שדה בלתי ניראה">
+
 					<button type="submit" class="btn btn-default">שלח</button>
 				</form>
 			</div>
@@ -96,8 +104,7 @@
 	$(document).ready(function(){
 		$('#jetform').jetform({
 			token:'nZq6scKaNvcXdgjszIcN1kaHhbYDKjAAie0yPKyTVU4AiE0Aiv9VGKu0sH7fVqWhqEkRvUyhbApBpYRGmgPkZA==',
-			submitLoader: true,
-			errorAtBottom: true
+			submitLoader: true
 		})
 	})
 	</script>
