@@ -10,6 +10,7 @@ Turn any static form to a Jetform with one line. [Demo](http://www.interjet.co.i
 - A ```<div>``` needs to wrap the ```<label>``` and the ```<input>``` tags.
 - If an input is required a ```required``` attribute should be added to the ```<input>```.
 - Load CSS
+- If input is ID number add ```data-idnumber``` attribute.
 
 ### Options
 
@@ -20,6 +21,7 @@ submitLoader  | Boolean | Default false, if true a loader will jump while the de
 beforeSubmit | Function(args) | Default ```console.log('הפרטים נשלחו')```
 onSuccess | Function(args) | Default ```alert('הפרטים נשלחו')```.
 onFail | Function(error) | Default ```alert('השליחה נכשלה')```.
+errorAtBottom | Boolean | Default false, if true errors will be appended to the bottom
 
 ### Example
 

@@ -7,6 +7,16 @@ form label{
 .has-error .has-error-text:before{
 	content:' - ';
 }
+.error-msg{
+	color: #ad0000;
+}
+.sr-only {
+	clip: rect(1px, 1px, 1px, 1px);
+	position: absolute !important;
+	height: 1px;
+	width: 1px;
+	overflow: hidden;
+}
 
 /** Loader **/
 .jetloader-wrapper{

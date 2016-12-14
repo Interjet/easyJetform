@@ -18,7 +18,7 @@
 				<form id="jetform" novalidate>
 					<div class="form-group">
 						<label for="firstName">שם פרטי</label>
-						<input class="form-control" required id="firstName" type="text" name="jf_txt_1">
+						<input class="form-control" required id="firstName" type="text" placeholder="שם פרטי" name="jf_txt_1">
 					</div>
 					<div class="form-group">
 						<label for="lastName">שם משפחה</label>
@@ -26,11 +26,15 @@
 					</div>
 					<div class="form-group">
 						<label for="emailInput">כתובת מייל</label>
-						<input class="form-control" id="emailInput" required type="email" name="jf_txt_3">
+						<input class="form-control" id="emailInput" type="email" name="jf_txt_3">
 					</div>
 					<div class="form-group">
 						<label for="telInput">טלפון</label>
-						<input class="form-control" id="telInput" required maxlength="11" type="tel" name="jf_txt_4">
+						<input class="form-control" id="telInput" maxlength="11" type="tel" name="jf_txt_4">
+					</div>
+					<div class="form-group">
+						<label for="idInput">תעודת זהות</label>
+						<input class="form-control" id="idInput" data-idnumber type="number" name="jf_txt_9">
 					</div>
 					
 					<div class="form-group">
@@ -92,7 +96,8 @@
 	$(document).ready(function(){
 		$('#jetform').jetform({
 			token:'nZq6scKaNvcXdgjszIcN1kaHhbYDKjAAie0yPKyTVU4AiE0Aiv9VGKu0sH7fVqWhqEkRvUyhbApBpYRGmgPkZA==',
-			submitLoader: true
+			submitLoader: true,
+			errorAtBottom: true
 		})
 	})
 	</script>
