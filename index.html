@@ -22,7 +22,7 @@
 					</div>
 					<div class="form-group">
 						<label for="lastName">שם משפחה</label>
-						<input class="form-control" required id="lastName" type="text" name="jf_txt_2">
+						<input class="form-control" id="lastName" type="text" name="jf_txt_2">
 					</div>
 					<div class="form-group">
 						<label for="emailInput">כתובת מייל</label>
@@ -41,8 +41,6 @@
 						<textarea class="form-control" required name="jf_area_11" rows="5" id="textareaInput"></textarea>
 					</div>
 
-
-					
 					<div class="form-group">
 						<label for="selectInput">תבחר מספר</label>
 						<select id="selectInput" required name="jf_combo_7" class="form-control">
@@ -55,9 +53,14 @@
 						</select>
 					</div>
 
+					<div class="form-group">
+						<label for="textInput">הודעת שגיאה מותאמת</label>
+						<input class="form-control" id="textInput" required type="text" data-error="חמוצים" name="jf_txt_12">
+					</div>
+
 					<div class="checkbox">
 						<label>
-							<input id="jf_chk_5" required type="checkbox" name="jf_chk_5"> זה חובה
+							<input id="jf_chk_5" type="checkbox" name="jf_chk_5"> זה חובה
 						</label>
 					</div>
 					<div class="checkbox">
@@ -66,29 +69,31 @@
 						</label>
 					</div>
 
+					<h4>תבחר אופציה</h4>
 					<div class="radio">
 						<label>
-							<input type="radio" name="jf_rdb_8" id="optionsRadios1" value="כחול" required>
+							<input type="radio" name="jf_rdb_8" data-name="צבעים" id="optionsRadios1" value="כחול" required>
 							גלולה כחולה
 						</label>
 					</div>
 					<div class="radio">
 						<label>
-							<input type="radio" name="jf_rdb_8" id="optionsRadios2" value="אדום" required>
+							<input type="radio" name="jf_rdb_8" data-name="צבעים" id="optionsRadios2" value="אדום" required>
 							גלולה אדומה
 						</label>
 					</div>
-
+					
+					<h4>עוד אופציה</h4>
 					<div class="radio">
 						<label>
-							<input type="radio" name="jf_rdb_9" id="optionsRadios3" value="כחול" required>
-							גלולה כחולה
+							<input type="radio" name="jf_rdb_9" data-name="מכשירים" id="optionsRadios3" value="כחול" required>
+							iPhone
 						</label>
 					</div>
 					<div class="radio">
 						<label>
-							<input type="radio" name="jf_rdb_9" id="optionsRadios4" value="אדום" required>
-							גלולה אדומה
+							<input type="radio" name="jf_rdb_9" data-name="מכשירים" id="optionsRadios4" value="אדום" required>
+							Android
 						</label>
 					</div>
 
@@ -96,6 +101,8 @@
 
 					<button type="submit" class="btn btn-default">שלח</button>
 				</form>
+
+				<p id="errors">שגיאה: <span id="error-msg"></span></p>
 			</div>
 		</div>
 	</div>
@@ -104,7 +111,9 @@
 	$(document).ready(function(){
 		$('#jetform').jetform({
 			token:'nZq6scKaNvcXdgjszIcN1kaHhbYDKjAAie0yPKyTVU4AiE0Aiv9VGKu0sH7fVqWhqEkRvUyhbApBpYRGmgPkZA==',
-			submitLoader: true
+			submitLoader: true,
+			alertErrors: false,
+			errorAtBottom: false //'#error-msg'
 		})
 	})
 	</script>

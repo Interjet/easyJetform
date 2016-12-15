@@ -1,4 +1,4 @@
-/*! easyJetform - v1.1.1 - 14-12-2016  !*/
+/*! easyJetform - v1.2.0 - 15-12-2016  !*/
 
 (function($){
 	$.fn.jetform = function(options){
@@ -11,25 +11,34 @@
 		}
 
 		var errors = {
-			required:"שדה חובה",
-			checkboxRequired:"שדה צ'אקבוס הוא חובה",
-			radioRequired:"יש לבחור באחת האופציות",
-			inCorrectPhone:"מספר טלפון לא תקין",
-			inCorrectEmail:"כתובת מייל לא תקינה",
 			sending:"שולח נתונים",
 			success:"הפרטים התקבלו בהצלחה",
 			fail:"ארעה שגיאה בזמן שליחת הנתונים",
 			unique: "ניתן להירשם פעם אחת בלבד",
-			idNumber: "מספר תעודת הזהות לא תקין"
-		}		
+		}
 
 		// default settings
-		var settings = $.extend({
+		var settings = $.extend(true, {
 			alertErrors: false,
 			submitLoader: false,
 			errorAtBottom: false,
+			validation: {
+				tel: {
+					min: 9,
+					max: 10
+				}
+			},
+			template: {
+				required: "{$field} שדה חובה",
+				checkboxRequired: "נא לסמן את {$field}",
+				radioRequired:"יש לבחור באחת האופציות של {$field}",
+				shortPhone: "{$field} צריך להיות לפחות {$min} ספרות",
+				longPhone: "{$field} צריך להיות מקסימום {$max} ספרות",
+				inCorrectEmail: "כתובת מייל לא תקינה",
+				idNumber: "מספר תעודת הזהות לא תקין"
+			},
 			beforeSubmit: function(args){
-				console.log('שולח נתונים...');
+				console.log(errors.sending);
 			},
 			onSuccess: function(args){
 				alert(errors.success);
@@ -54,7 +63,7 @@
 		var errorsArray = [];
 
 		// Set jetPlaceholder
-		theForm.find('input').jetPlaceholder();
+		theForm.find('input, select, textarea').jetPlaceholder();
 
 		// On submit form
 		theForm.on('submit', function(e){
@@ -65,66 +74,74 @@
 
 			// going through all inputs
 			theForm.find('input, select, textarea').each(function(index, element){
-				// skip submit and hidden inputs
+				// skip submit
 				if($(element).attr('type') == 'submit'){
 					return;
 				}
 
-				// if empy and no required dont check
+				// if empty and not required, skip
 				if(!$.trim($(element).val()).length && !$(element).attr('required') ){
 					return;
 				}
 
 				// if empty and required
 				if(!$.trim($(element).val()).length && !!$(element).attr('required')){
-					isValid = notValid(errors.required ,$(element));
+					isValid = notValid('required' ,$(element));
 					return;
 				}
 
-				// if too short
+				// phone validation
 				if($(element).attr('type') == 'tel'){
-					if($(element).val().length < 9){
-						isValid = notValid(errors.inCorrectPhone ,$(element));
-						return;
+					if(!!settings.validation.tel.min){
+						if($(element).val().length < settings.validation.tel.min){
+							isValid = notValid('shortPhone', $(element));
+							return;
+						}
 					}
-				}
-
-				// check if mail is valid
-				if($(element).attr('type') == 'email'){
-					if($(element).val().length < 5 || $(element).val().indexOf('@') == -1){
-						isValid = notValid(errors.inCorrectEmail ,$(element));
-						return;
-					}
-				}
-
-				if($(element).data('idnumber') == ""){
-					if(!idNumber($(element).val())){
-						isValid = notValid(errors.idNumber ,$(element));
-						return;
-					}
-				}
-
-				// checkbox
-				if($(element).attr('type') == 'checkbox'){
-					if(!!$(element).attr('required') && !$(element).is(':checked')){
-						isValid = notValid(errors.checkboxRequired ,$(element));
-						return;
-					}
-				}
-
-				if($(element).attr('type') == 'radio'){
-					if(!!$(element).attr('required')){
-						var rdbName = $(element).attr('name');
-						if(!$('input[name="' + rdbName + '"]:checked').val()){
-							isValid = notValid(errors.radioRequired ,$(element));
+					if(!!settings.validation.tel.max){
+						if($(element).val().length > settings.validation.tel.max){
+							isValid = notValid('longPhone', $(element));
 							return;
 						}
 					}
 				}
 
-				// if($(element).prop('tagName') == "SELECT"){
+				// email validation
+				if($(element).attr('type') == 'email'){
+					if($(element).val().length < 5 || $(element).val().indexOf('@') == -1){
+						isValid = notValid('inCorrectEmail' ,$(element));
+						return;
+					}
+				}
 
-				// }
+				// ID number validation
+				if($(element).data('idnumber') == ""){
+					if(!idNumber($(element).val())){
+						isValid = notValid('idNumber' ,$(element));
+						return;
+					}
+				}
+
+				// checkbox validation
+				if($(element).attr('type') == 'checkbox'){
+					if(!!$(element).attr('required') && !$(element).is(':checked')){
+						isValid = notValid('checkboxRequired' ,$(element));
+						return;
+					}
+				}
+
+				// radio validation
+				if($(element).attr('type') == 'radio'){
+					if(!!$(element).attr('required')){
+						var rdbName = $(element).attr('name');
+						if(!$('input[name="' + rdbName + '"]:checked').val() && !$('input[name="' + rdbName + '"][aria-invalid="true"]').length){
+							isValid = notValid('radioRequired' ,$(element));
+						} else if(!$('input[name="' + rdbName + '"]:checked').val()){
+							$(element).parent().addClass('has-error');
+						}
+						return;
+					}
+				}
 
 				// if everything is ok insert to args object by the name attribute
 				if($(element).attr('type') == 'checkbox'){
@@ -136,17 +153,9 @@
 				}
 			}) // end input validation
 
-			// theForm.find('select').each(function(index, element){
-			// 	// if empty and required
-			// 	if(!$.trim($(element).val()).length && !!$(element).attr('required')){
-			// 		isValid = notValid(errors.required ,$(element));
-			// 		return;
-			// 	}
-
-			// 	// if everything is ok insert to args object by the name attribute
-			// 	args[$(element).attr('name')] = $(element).val();
-			// }) // end select validation
-
+			/*********************************
+				If Valid
+			**********************************/
 			if(isValid){
 				// before submiting
 				settings.beforeSubmit(args);
@@ -181,9 +190,13 @@
 		        });
 			} else{
 				if(!!settings.errorAtBottom && errorsArray != []){
-					theForm.append('<p class="error-msg">' + errorsArray[0] + '</p>')
+					if(settings.errorAtBottom === true){
+						theForm.append('<p class="error-msg">' + errorsArray[0] + '</p>')
+					} else {
+						$(settings.errorAtBottom).text(errorsArray[0]);
+					}
 				}
-				$('.has-error').find('input, select')[0].focus();
+				$('.has-error').find('input, select, textarea')[0].focus();
 			}
 
 		}) // end submit
@@ -192,28 +205,24 @@
 		function notValid(error, element){
 			$(element).parent().addClass('has-error');
 
+			$(element).attr('aria-invalid', true);
+
+			// If error at bottom selected, collect the errors
 			if(!!settings.errorAtBottom){
-				if(error != 'שדה חובה'){
-					errorsArray.push(error);
-				} else {
-					errorsArray.push($(element).prev().text() + ' ' + error);
-				}
+				errorsArray.push($(element).data('error') || compileErrorMessage(error, element));
 				return false;
 			}
 
+			// if alert errors selected
 			if(settings.alertErrors){
-				if(error != 'שדה חובה'){
-					alert(error);
-				} else{
-					alert($(element).prev().text() + ' ' + error);
-				}
+				alert($(element).data('error') || compileErrorMessage(error, element));
 				return false;
 			}
 
 			if($(element).attr('type') == 'checkbox' || $(element).attr('type') == 'radio'){
-				$(element).parent().append(' <span class="has-error-text">' + error + '</span>');
+				$(element).parent().append(' <span class="has-error-text">' + ($(element).data('error') || compileErrorMessage(error, element)) + '</span>');
 			} else{
-				$(element).parent().find('label').append('<span class="has-error-text">' + error + '</span>');
+				$(element).parent().find('label').append('<span class="has-error-text">' + ($(element).data('error') || compileErrorMessage(error, element)) + '</span>');
 			}
 
 			return false;
@@ -222,11 +231,19 @@
 		// reset form from errors and values
 		function formReset(form){
 			form.find('input').jetPlaceholder();
+			form.find('[aria-invalid="true"]').attr('aria-invalid','false');
 			form.find('.has-error').removeClass('has-error');
 			form.find('.has-error-text').remove();
 			form.find('.error-msg').remove();
 		}
 
+		function compileErrorMessage(message, element){
+			return (element.attr('type') in settings.validation) ?
+				settings.template[message].replace('{$field}', element.data('name') || element.attr('placeholder') || element.parent().find('label').text() || element.parent().text()).replace('{$min}', settings.validation[element.attr('type')].min).replace('{$max}', settings.validation[element.attr('type')].max)
+				: settings.template[message].replace('{$field}', element.data('name') || element.attr('placeholder') || element.parent().find('label').text() || element.parent().text());
+		}
+
+		// id number verification
 		function idNumber(str){
 		    var IDnum = String(str);
 		    // Validate correct input
