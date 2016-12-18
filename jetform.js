@@ -1,4 +1,4 @@
-/*! easyJetform - v1.2.0 - 15-12-2016  !*/
+/*! easyJetform - v1.2.1 - 18-12-2016  !*/
 
 (function($){
 	$.fn.jetform = function(options){
@@ -107,8 +107,10 @@
 				}
 
 				// email validation
+				var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/igm;
 				if($(element).attr('type') == 'email'){
-					if($(element).val().length < 5 || $(element).val().indexOf('@') == -1){
+					console.log($(element).val())
+					if( !re.test($(element).val()) ){
 						isValid = notValid('inCorrectEmail' ,$(element));
 						return;
 					}
