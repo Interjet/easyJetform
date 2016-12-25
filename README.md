@@ -1,22 +1,21 @@
-# easyJetform - v1.2.5
+# easyJetform - v1.2.6
 
 Turn any form to a Jetform :)
 [Demo](http://www.interjet.co.il/camp/interjet/easyjetform/).
 
 ### Important
 
-- ```<form>``` needs to have a ```novalidate``` attribute
 - Each input needs to have a ```name="..."``` attribute.
 - Each input needs to have a ```<label for="...">```.
 - A ```<div>``` needs to wrap the ```<label>``` and the ```<input>``` tags.
-- Load CSS
+- Load CSS.
 
 ### Extras
 
 - If an input is required a ```required``` attribute should be added to the ```<input>```.
 - If input is ID number add ```data-idnumber``` attribute.
-- ```data-name="..."``` input name(for errors)
-- ```data-error="..."``` to display custom error
+- ```data-name="..."``` input name(for errors).
+- ```data-error="..."``` to display custom error.
 
 
 ### Options

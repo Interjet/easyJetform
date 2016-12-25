@@ -1,7 +1,7 @@
 /*!
- * easyJetform - v1.2.5
+ * easyJetform - v1.2.6
  * Ron Kantor
- * 21-12-2016
+ * 25-12-2016
 !*/
 
 (function($){
@@ -70,6 +70,8 @@
 
 		// Fix text in inputs
 		inputTextFix(formInputs);
+
+		theForm.attr('novalidate',true);
 
 		/*********************************
 			Inputs Validation
