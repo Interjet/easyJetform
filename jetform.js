@@ -254,6 +254,7 @@
 			form.find('.has-error').removeClass('has-error');
 			form.find('.has-error-text').remove();
 			form.find('.error-msg').remove();
+			$(settings.errorAtBottom).text('');
 		} // formReset
 
 		// Create error message
