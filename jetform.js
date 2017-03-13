@@ -43,6 +43,7 @@
 				radioRequired:"יש לבחור באחת האופציות של {$field}",
 				shortPhone: "{$field} צריך להיות לפחות {$min} ספרות",
 				longPhone: "{$field} צריך להיות מקסימום {$max} ספרות",
+				validIsraeliPhone: "{$field} צריך להכיל מספר טלפון ישראלי תקין",
 				inCorrectEmail: "כתובת מייל לא תקינה",
 				idNumber: "מספר תעודת הזהות לא תקין"
 			},
@@ -113,6 +114,12 @@
 							isValid = notValid('longPhone', $(element));
 							return;
 						}
+					}
+
+					var regex = /^0(5[^7]|[2-4]|[8-9]|7[0-9])[0-9]{7}$/;
+					if(!regex.test($(element).val())) {
+						isValid = notValid('validIsraeliPhone', $(element));
+						return;
 					}
 				}
 
