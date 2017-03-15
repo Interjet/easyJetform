@@ -28,12 +28,12 @@
 					</div>
 					<div class="form-group">
 						<label for="emailInput">כתובת מייל</label>
-						<input class="form-control" id="emailInput" placeholder="אימייל" required type="email" data-validate="" name="jf_txt_3">
+						<input class="form-control" id="emailInput" placeholder="אימייל" type="email" data-validate="valid_email" name="jf_txt_3">
 						<div class="input-error"></div>
 					</div>
 					<div class="form-group">
 						<label for="telInput">טלפון</label>
-						<input class="form-control" id="telInput" type="tel" name="jf_txt_4" data-validate="required|integer">
+						<input class="form-control" id="telInput" type="tel" name="jf_txt_4" data-validate="required|integer|min_length[9]">
 						<div class="input-error"></div>
 					</div>
 					<div class="form-group">

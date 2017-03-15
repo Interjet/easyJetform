@@ -124,6 +124,11 @@
                     validations = ($.inArray('required', validations) < 0)? $.merge(validations, ['required']) : validations;
                 }
 
+                // Skip fields without value and without a required rule
+                if($.inArray('required', validations) < 0 && !$(field).val().length){
+                    return;
+                }
+
                 if(!!validations.length) {
                     $(validations).each($.proxy(function(i, rule){
                         matches = rule.match(/\[(.*?)\]/);
