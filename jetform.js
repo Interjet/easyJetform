@@ -11,12 +11,14 @@
             url: '//jetform.interjet.co.il/lead/save',
             template: {
                 required: "{$field} שדה חובה",
-                min_length: "{$field} מכיל ערך קצר מדי",
-                max_length: "{$field} מכיל ערך ארוך מדי",
+                min_length: "{$field} חייב להיות באורך של {$value} תווים לפחות",
+                max_length: "{$field} חייב להיות לא יותר מ-{$value} תווים",
+                exact_length: "{$field} חייב להיות באורך של {$value} תווים",
                 valid_email: "{$field} אינו מכיל כתובת דואל תקינה",
                 valid_id_number: "מספר תעודת הזהות לא תקין",
                 valid_url: "{$field} אינו מכיל כתובת תקינה",
                 integer: "{$field} מכיל תווים לא מספריים",
+                alpha: "{$field} מכיל תווים אשר אינם אותיות",
                 response: {
                     sending: "שולח נתונים",
                     success: "הפרטים התקבלו בהצלחה",
@@ -122,7 +124,7 @@
                                     field: $(field),
                                     rule: rule.split('[')[0],
                                     value: matches[1],
-                                    message: this.compileError($(field), rule.split('[')[0])
+                                    message: this.compileError($(field), rule.split('[')[0], matches[1])
                                 });
                             }
                         } else {
@@ -233,8 +235,10 @@
             // Focus the first field
             this.errors[0].field.focus();
         },
-        compileError: function(element, rule){
-            return this.options.template[rule].replace('{$field}', element.data('name') || element.attr('placeholder') || element.parent().find('label').text() || element.parent().text());
+        compileError: function(element, rule, value){
+            var error = this.options.template[rule].replace('{$field}', element.data('name') || element.attr('placeholder') || element.parent().find('label').text() || element.parent().text());
+            error = (!!value) ? error.replace('{$value}', value) : error;
+            return error;
         },
         inputTextFix: function(){
             var isRegExpSupported = ('RegExp' in window),
@@ -359,6 +363,10 @@
                 }
                 
                 return mone % 10 == 0;
+            },
+            alpha: function(string){
+                var re = /^((?![0-9\~\!\@\#\$\%\^\&\*\(\)\_\+\=\-\[\]\{\}\;\:\"\\\/\<\>\?]).)+$/g;
+                return re.test(string.val());
             }
         },
         postCORS: function(c, a, b, d) {
