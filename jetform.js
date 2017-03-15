@@ -117,7 +117,7 @@
 
                         matches = rule.match(/\[(.*?)\]/);
                         if(!!matches) {
-                            if(!Jetform.Utils.validations[rule.split('[')[0]].call(this, $(field).val(), matches[1])) {
+                            if(!Jetform.Utils.validations[rule.split('[')[0]].call(this, $(field), matches[1])) {
                                 this.errors.push({
                                     field: $(field),
                                     rule: rule.split('[')[0],
@@ -126,7 +126,7 @@
                                 });
                             }
                         } else {
-                            if(!Jetform.Utils.validations[rule.split('[')[0]].call(this, $(field).val())) {
+                            if(!Jetform.Utils.validations[rule.split('[')[0]].call(this, $(field))) {
                                 this.errors.push({
                                     field: $(field),
                                     rule: rule.split('[')[0],
@@ -150,7 +150,7 @@
         },
         resetFieldError: function(field){
             if(!!this.options.errorSelector) {
-                field.parent().find(this.options.errorSelector).text('').hide();
+                field.closest('div').find(this.options.errorSelector).text('').hide();
                 field.attr('aria-invalid', true);
             } else {
                 $(this.options.errorSelector).text('').hide();
@@ -190,13 +190,11 @@
                         
                         dataLayer.push(layer);
                     }
-                }
-                if(response.indexOf('success=true') >- 1){
+
                     this.options.onSuccess.call(this, this.args);
-                }
-                else if(response.indexOf('reason=unique') >- 1){
+                } else if(response.indexOf('reason=unique') >- 1){
                     this.options.onFail.call(this, this.options.template.response.unique);
-                }  else{
+                } else{
                     this.options.onFail.call(this, this.options.template.response.fail);
                 }
             }, this));
@@ -209,7 +207,7 @@
                 if($.inArray(error.field.attr('id'), displayedFields) < 0) {
                     if(this.showAllErrors) {
                         if(!!this.options.errorSelector) {
-                            error.field.parent('div').find(this.options.errorSelector).text(error.message).show();
+                            error.field.closest('div').find(this.options.errorSelector).text(error.message).show();
                             error.field.attr('aria-invalid', true);
                         } else {
                             alert(error.message);
@@ -310,30 +308,37 @@
         },
         validations: {
             min_length: function(string, value){
-                return value <= string.length;
+                return value <= string.val().length;
             },
             max_length: function(string, value){
-                return value >= string.length;
+                return value >= string.val().length;
             },
             exact_length: function(string, value){
-                return value == string.length;
+                return value == string.val().length;
             },
             required: function(string){
-                return !!string.length;
+                if(string.attr('type') == 'checkbox'){
+                    return string.is(':checked')
+                } else if(string.attr('type') == 'radio'){
+                    return this.form.find('input[name="' + string.attr('name') + '"]:checked').length > 0
+                } else{
+                    return !!string.val().length;
+                }
             },
             integer: function(string){
                 var re = /^\d+$/;
-                return re.test(string);
+                return re.test(string.val());
             },
             valid_email: function(string){
                 var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/igm;
-                return re.test(string);
+                return re.test(string.val());
             },
             valid_url: function(string, easy){
                 var re = (!!easy)? /^(?:(ftp|http|https):\/\/)?(?:[\w-]+\.)+[a-z]{2,6}$/ : /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/;
-                return re.test(string);
+                return re.test(string.val());
             },
             valid_id_number: function(string){
+                string = (typeof string !== 'string')? string.val() : string;
                 if ((string.length > 9) || (string.length < 5) || isNaN(string))
                     return false;
 
