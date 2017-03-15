@@ -130,7 +130,11 @@
 
                 // Adding the valid_phone validation to fields of type tel
                 if($(field).attr('type') == 'tel') {
-                    validations = ($.inArray('valid_phone', validations) < 0)? $.merge(validations, ['valid_phone']) : validations;
+                    var arr = jQuery.grep(validations, function( n, i ) {
+                        return ( n.indexOf('max_length') > -1 || n.indexOf('min_length') > -1 );
+                    });
+
+                    validations = ($.inArray('valid_phone', validations) < 0 && !arr.length)? $.merge(validations, ['valid_phone']) : validations;
                 }
 
                 // Skip fields without value and without a required rule
