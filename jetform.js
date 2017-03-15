@@ -28,6 +28,16 @@
                     unique: "ניתן להירשם פעם אחת בלבד",
                 }
             },
+            permit: {
+                tel: {
+                    rule: /^\d+$/,
+                    event: 'keypress'
+                },
+                number: {
+                    rule: /^\d+$/,
+                    event: 'keypress'
+                }
+            },
             beforeSubmit: function(args){},
             onSuccess: function(args){},
             onError: function(args){},
@@ -81,6 +91,9 @@
             if(this.options.autoAlign) {
                 this.inputTextFix();
             }
+
+            // Set fields permissions
+            this.setFieldsPermissions();
 
             // Submit event handler
             this.form.on('submit', $.proxy(function(event){
@@ -164,6 +177,17 @@
                                     message: this.compileError($(field), rule.split('[')[0])
                                 });
                             }
+                        }
+                    }, this));
+                }
+            }, this));
+        },
+        setFieldsPermissions: function(){
+            this.fields.each($.proxy(function(index, field){
+                if(!!this.options.permit[$(field).attr('type')]) {
+                    $(field).on(this.options.permit[$(field).attr('type')].event, $.proxy(function(event){
+                        if(!this.options.permit[$(field).attr('type')].rule.test(event.key)) {
+                            return false;
                         }
                     }, this));
                 }
@@ -374,7 +398,7 @@
                 return re.test(element.val());
             },
             valid_id_number: function(element){
-                var string = (typeof string !== 'string')? string.val() : string;
+                var string = (typeof element !== 'string')? element.val() : element;
                 if ((string.length > 9) || (string.length < 5) || isNaN(string))
                     return false;
 
