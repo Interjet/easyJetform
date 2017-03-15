@@ -232,6 +232,9 @@
             // Reset the form
             this.form.trigger('reset');
 
+            // Disable the submit button
+            this.form.find('*[type="submit"]').prop('disabled', true);
+
             // Send the data using CORS
             Jetform.Utils.postCORS(this.options.url, $.param(this.args), $.proxy(function(response){
                 if(response.indexOf('success')>-1){
@@ -251,6 +254,10 @@
                 } else{
                     this.options.onFail.call(this, this.options.template.response.fail);
                 }
+
+                // Enable the submit button
+                this.form.find('*[type="submit"]').prop('disabled', false);
+
             }, this));
         },
         displayErrors: function(){
