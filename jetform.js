@@ -157,11 +157,7 @@
             }
 
         },
-        send: function() {
-            // Call the event handler
-            this.options.beforeSubmit.call(this, this.args);
-
-            // Collect the input data
+        collectInputData: function(){
             this.fields.each($.proxy(function(index, field){
                 if($(field).attr('type') == 'checkbox'){
                     this.args[$(field).attr('name')] = $(field).is(':checked')
@@ -171,6 +167,13 @@
                     this.args[$(field).attr('name')] = $(field).val();
                 }
             }, this));
+        },
+        send: function() {
+            // Call the event handler
+            this.options.beforeSubmit.call(this, this.args);
+
+            // Collect the input data
+            this.collectInputData();
 
             // Reset the form
             this.form.trigger('reset');
@@ -203,7 +206,7 @@
 
             // Display all the errors
             $.each(this.errors, $.proxy(function(index, error){
-                if($.inArray(error.field, displayedFields) < 0) {
+                if($.inArray(error.field.attr('id'), displayedFields) < 0) {
                     if(this.showAllErrors) {
                         if(!!this.options.errorSelector) {
                             error.field.parent().find(this.options.errorSelector).text(error.message).show();
@@ -211,6 +214,8 @@
                         } else {
                             alert(error.message);
                         }
+
+                        error.field.trigger('error', error);
                     } else {
                         if(!!this.options.errorSelector) {
                             $(this.options.errorSelector).text(error.message).show();
@@ -218,10 +223,12 @@
                             alert(error.message);
                         }
 
+                        error.field.trigger('error', error);
+
                         return false;
                     }
 
-                    displayedFields.push(error.field);
+                    displayedFields.push(error.field.attr('id'));
                 }
             }, this));
 
