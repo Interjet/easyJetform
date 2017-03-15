@@ -80,6 +80,9 @@
             this.form.on('submit', $.proxy(function(event){
                 event.preventDefault();
 
+                // Get the fields (In case they where manipulated since the instance was created)
+                this.fields = this.form.find('input, select, textarea');
+
                 this.reset();
                 this.validate();
 
