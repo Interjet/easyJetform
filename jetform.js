@@ -29,7 +29,8 @@
                 }
             },
             spinner: {
-                width: '20px',
+                active: true,
+                width: '30px',
                 height: '20px',
                 color: '#333'
             },
@@ -237,10 +238,15 @@
             this.form.trigger('reset');
 
             // Disable the submit button and add a spinner
-            this.form.find('*[type="submit"]').prop('disabled', true).data('value', this.form.find('*[type="submit"]').text()).text(this.options.template.response.sending).append(this.getSpinner());
+            this.form.find('*[type="submit"]').prop('disabled', true).data('value', this.form.find('*[type="submit"]').text()).text(this.options.template.response.sending);
 
-            // Set the spinner color
-            this.form.find('svg path, svg rect').css('fill', this.options.spinner.color);
+            if(this.options.spinner.active){
+                // Append the spinner
+                this.form.find('*[type="submit"]').append(this.getSpinner());
+
+                // Set the spinner color
+                this.form.find('svg path, svg rect').css('fill', this.options.spinner.color);
+            }
 
             // Send the data using CORS
             Jetform.Utils.postCORS(this.options.url, $.param(this.args), $.proxy(function(response){
@@ -263,10 +269,11 @@
                 }
 
                 // Enable the submit button & remove the spinner
-                this.form.find('*[type="submit"]').prop('disabled', false).find('.loader').remove();
+                this.form.find('*[type="submit"]').prop('disabled', false).text(this.form.find('*[type="submit"]').data('value'));
 
-                // Restore the original button's value
-                this.form.find('*[type="submit"]').text(this.form.find('*[type="submit"]').data('value'));
+                if(this.options.spinner.active) {
+                    this.form.find('*[type="submit"]').find('.loader').remove();
+                }
 
             }, this));
         },
