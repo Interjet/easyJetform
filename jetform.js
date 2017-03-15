@@ -16,6 +16,7 @@
                 max_length: "{$field} חייב להיות לא יותר מ-{$value} תווים",
                 exact_length: "{$field} חייב להיות באורך של {$value} תווים",
                 valid_email: "{$field} אינו מכיל כתובת דואל תקינה",
+                valid_phone: "{$field} אינו מכיל מספר טלפון תקין",
                 valid_id_number: "מספר תעודת הזהות לא תקין",
                 valid_url: "{$field} אינו מכיל כתובת תקינה",
                 integer: "{$field} מכיל תווים לא מספריים",
@@ -125,6 +126,11 @@
                 // Adding the valid_email validation to fields of type email
                 if($(field).attr('type') == 'email') {
                     validations = ($.inArray('valid_email', validations) < 0)? $.merge(validations, ['valid_email']) : validations;
+                }
+
+                // Adding the valid_phone validation to fields of type tel
+                if($(field).attr('type') == 'tel') {
+                    validations = ($.inArray('valid_phone', validations) < 0)? $.merge(validations, ['valid_phone']) : validations;
                 }
 
                 // Skip fields without value and without a required rule
@@ -357,6 +363,10 @@
             },
             valid_url: function(element, easy){
                 var re = (!!easy)? /^(?:(ftp|http|https):\/\/)?(?:[\w-]+\.)+[a-z]{2,6}$/ : /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/;
+                return re.test(element.val());
+            },
+            valid_phone: function(element){
+                var re = /^0(5[^7]|[2-4]|[8-9]|7[0-9])[0-9]{7}$/;
                 return re.test(element.val());
             },
             valid_id_number: function(element){
