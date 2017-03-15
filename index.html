@@ -23,12 +23,12 @@
 					</div>
 					<div class="form-group">
 						<label for="lastName">שם משפחה</label>
-						<input class="form-control" id="lastName" placeholder="שם משפחה" type="text" name="jf_txt_2">
+						<input class="form-control" id="lastName" placeholder="שם משפחה" type="text" data-validate="isRon" name="jf_txt_2">
 						<div class="input-error"></div>
 					</div>
 					<div class="form-group">
 						<label for="emailInput">כתובת מייל</label>
-						<input class="form-control" id="emailInput" placeholder="אימייל" type="email" data-validate="valid_email" name="jf_txt_3">
+						<input class="form-control" id="emailInput" placeholder="אימייל" type="email" name="jf_txt_3">
 						<div class="input-error"></div>
 					</div>
 					<div class="form-group">
@@ -68,7 +68,7 @@
 
 					<div class="checkbox">
 						<label>
-							<input id="jf_chk_5" type="checkbox" data-validate="required" name="jf_chk_5"> זה חובה
+							<input id="jf_chk_5" type="checkbox" required name="jf_chk_5"> זה חובה
 						</label>
 						<div class="input-error"></div>
 					</div>
@@ -85,7 +85,7 @@
 							<input type="radio" name="jf_rdb_8" data-name="צבעים" id="optionsRadios1" data-validate="required" value="כחול" required>
 							גלולה כחולה
 						</label>
-						<br>
+                        <br>
 						<label>
 							<input type="radio" name="jf_rdb_8" data-name="צבעים" id="optionsRadios2" data-validate="required" value="אדום" required>
 							גלולה אדומה
@@ -125,17 +125,9 @@
 	
 	<script>
 		$(document).ready(function(){
-
-//		    Jetform.Utils.validations.isRon = function(element){
-//				return element.val() === 'ron';
-//			}
-
-			$('#jetform').jetform({
+            $('#jetform').jetform({
 				token:'nZq6scKaNvcXdgjszIcN1kaHhbYDKjAAie0yPKyTVU4AiE0Aiv9VGKu0sH7fVqWhqEkRvUyhbApBpYRGmgPkZA==',
 				errorSelector: '.input-error',
-                template: {
-                    isRon: "{$field} אינו רון"
-				},
 				onSuccess: function(args){
 					console.log(args);
 				},

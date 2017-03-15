@@ -6,7 +6,7 @@
             errorSelector: false,
             autoValidate: false,
             autoSend: false,
-            resetErrorEvent: 'keypress',
+            resetErrorEvent: 'keyup',
             autoAlign: true,
             telMaxLength: 10,
             url: '//jetform.interjet.co.il/lead/save',
@@ -32,8 +32,6 @@
             onError: function(args){},
             onFail: function(args){},
         }, options);
-
-        console.log(this.options);
 
         this.form = $(item);
         
@@ -124,6 +122,11 @@
                     validations = ($.inArray('required', validations) < 0)? $.merge(validations, ['required']) : validations;
                 }
 
+                // Adding the valid_email validation to fields of type email
+                if($(field).attr('type') == 'email') {
+                    validations = ($.inArray('valid_email', validations) < 0)? $.merge(validations, ['valid_email']) : validations;
+                }
+
                 // Skip fields without value and without a required rule
                 if($.inArray('required', validations) < 0 && !$(field).val().length){
                     return;
@@ -132,6 +135,7 @@
                 if(!!validations.length) {
                     $(validations).each($.proxy(function(i, rule){
                         matches = rule.match(/\[(.*?)\]/);
+
                         if(!!matches) {
                             if(!Jetform.Utils.validations[rule.split('[')[0]].call(this, $(field), matches[1])) {
                                 this.errors.push({
@@ -142,7 +146,7 @@
                                 });
                             }
                         } else {
-                            if(!Jetform.Utils.validations[rule.split('[')[0]].call(this, $(field))) {
+                            if(!Jetform.Utils.validations[rule].call(this, $(field))) {
                                 this.errors.push({
                                     field: $(field),
                                     rule: rule.split('[')[0],
