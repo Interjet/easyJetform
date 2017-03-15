@@ -249,9 +249,9 @@
                     }
 
                     this.options.onSuccess.call(this, this.args);
-                } else if(response.indexOf('reason=unique') >- 1){
+                } else if(response.indexOf('reason=unique') >- 1) {
                     this.options.onFail.call(this, this.options.template.response.unique);
-                } else{
+                } else {
                     this.options.onFail.call(this, this.options.template.response.fail);
                 }
 
