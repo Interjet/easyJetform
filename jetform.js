@@ -215,7 +215,7 @@
                             alert(error.message);
                         }
 
-                        error.field.trigger('error', error);
+                        error.field.trigger('jetform.error', error);
                     } else {
                         if(!!this.options.errorSelector) {
                             $(this.options.errorSelector).text(error.message).show();
@@ -223,7 +223,7 @@
                             alert(error.message);
                         }
 
-                        error.field.trigger('error', error);
+                        error.field.trigger('jetform.error', error);
 
                         return false;
                     }
