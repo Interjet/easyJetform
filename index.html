@@ -28,12 +28,12 @@
 					</div>
 					<div class="form-group">
 						<label for="emailInput">כתובת מייל</label>
-						<input class="form-control" id="emailInput" placeholder="אימייל" required type="email" data-validate="required|valid_email" name="jf_txt_3">
+						<input class="form-control" id="emailInput" placeholder="אימייל" required type="email" data-validate="" name="jf_txt_3">
 						<div class="input-error"></div>
 					</div>
 					<div class="form-group">
 						<label for="telInput">טלפון</label>
-						<input class="form-control" id="telInput" maxlength="10" type="tel" name="jf_txt_4" data-validate="required|integer">
+						<input class="form-control" id="telInput" type="tel" name="jf_txt_4" data-validate="required|integer">
 						<div class="input-error"></div>
 					</div>
 					<div class="form-group">
@@ -125,10 +125,17 @@
 	
 	<script>
 		$(document).ready(function(){
+
+//		    Jetform.Utils.validations.isRon = function(element){
+//				return element.val() === 'ron';
+//			}
+
 			$('#jetform').jetform({
 				token:'nZq6scKaNvcXdgjszIcN1kaHhbYDKjAAie0yPKyTVU4AiE0Aiv9VGKu0sH7fVqWhqEkRvUyhbApBpYRGmgPkZA==',
 				errorSelector: '.input-error',
-				resetErrorEvent: 'keypress',
+                template: {
+                    isRon: "{$field} אינו רון"
+				},
 				onSuccess: function(args){
 					console.log(args);
 				},

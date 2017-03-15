@@ -1,13 +1,14 @@
 (function($){
     
     function Jetform(item, options) {
-        this.options = $.extend({
+        this.options = $.extend(true, {
             token: false,
             errorSelector: false,
             autoValidate: false,
             autoSend: false,
-            resetErrorEvent: false,
+            resetErrorEvent: 'keypress',
             autoAlign: true,
+            telMaxLength: 10,
             url: '//jetform.interjet.co.il/lead/save',
             template: {
                 required: "{$field} שדה חובה",
@@ -31,6 +32,8 @@
             onError: function(args){},
             onFail: function(args){},
         }, options);
+
+        console.log(this.options);
 
         this.form = $(item);
         
@@ -62,6 +65,9 @@
             // Add attributes to the base element
             this.form.attr('novalidate', true);
 
+            // Adding maxlength to inputs type tel
+            this.form.find('input[type="tel"]').attr('maxlength', this.options.telMaxLength);
+
             // Auto validate
             if(this.options.autoValidate) {
                 this.validate();
@@ -69,7 +75,6 @@
 
             // Auto send
             if(this.options.autoSend) {
-                this.options.beforeSubmit.call(this, this.args);
                 this.send();
             }
 
@@ -95,7 +100,6 @@
                 }
 
                 if(!this.errors.length){
-                    this.options.beforeSubmit.call(this, this.args);
                     this.send();
                 } else {
                     this.displayErrors();
@@ -105,18 +109,23 @@
 
         },
         validate: function() {
-            var matches = [];
+            var matches = [], validations = [];
 
             // Validate the inputs using our validation engine
             this.fields.each($.proxy(function(index, field){
+                validations = [];
+
                 if(!!$(field).data('validate')) {
-                    $($(field).data('validate').split('|')).each($.proxy(function(i, rule){
+                    validations = $.merge($(field).data('validate').split('|'), validations);
+                }
 
-                        // Skip inputs which are not required and contain no value
-                        if($.inArray('required', $(field).data('validate').split('|')) < 0 && !$(field).val().length) {
-                            return;
-                        }
+                // Adding the required validation in case of the required attribute presence
+                if(!!$(field).prop('required')){
+                    validations = ($.inArray('required', validations) < 0)? $.merge(validations, ['required']) : validations;
+                }
 
+                if(!!validations.length) {
+                    $(validations).each($.proxy(function(i, rule){
                         matches = rule.match(/\[(.*?)\]/);
                         if(!!matches) {
                             if(!Jetform.Utils.validations[rule.split('[')[0]].call(this, $(field), matches[1])) {
@@ -181,7 +190,7 @@
             this.form.trigger('reset');
 
             // Send the data using CORS
-            Jetform.Utils.postCORS('//jetform.interjet.co.il/lead/save', $.param(this.args), $.proxy(function(response){
+            Jetform.Utils.postCORS(this.options.url, $.param(this.args), $.proxy(function(response){
                 if(response.indexOf('success')>-1){
                     if(typeof dataLayer == 'object'){
                         var layer = $.extend(true, {'event':'jetform_submit_success'}, this.args);
@@ -311,38 +320,38 @@
             return !1
         },
         validations: {
-            min_length: function(string, value){
-                return value <= string.val().length;
+            min_length: function(element, value){
+                return value <= element.val().length;
             },
-            max_length: function(string, value){
-                return value >= string.val().length;
+            max_length: function(element, value){
+                return value >= element.val().length;
             },
-            exact_length: function(string, value){
-                return value == string.val().length;
+            exact_length: function(element, value){
+                return value == element.val().length;
             },
-            required: function(string){
-                if(string.attr('type') == 'checkbox'){
-                    return string.is(':checked')
-                } else if(string.attr('type') == 'radio'){
-                    return this.form.find('input[name="' + string.attr('name') + '"]:checked').length > 0
+            required: function(element){
+                if(element.attr('type') == 'checkbox'){
+                    return element.is(':checked')
+                } else if(element.attr('type') == 'radio'){
+                    return this.form.find('input[name="' + element.attr('name') + '"]:checked').length > 0
                 } else{
-                    return !!string.val().length;
+                    return !!element.val().length;
                 }
             },
-            integer: function(string){
+            integer: function(element){
                 var re = /^\d+$/;
-                return re.test(string.val());
+                return re.test(element.val());
             },
-            valid_email: function(string){
+            valid_email: function(element){
                 var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/igm;
-                return re.test(string.val());
+                return re.test(element.val());
             },
-            valid_url: function(string, easy){
+            valid_url: function(element, easy){
                 var re = (!!easy)? /^(?:(ftp|http|https):\/\/)?(?:[\w-]+\.)+[a-z]{2,6}$/ : /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/;
-                return re.test(string.val());
+                return re.test(element.val());
             },
-            valid_id_number: function(string){
-                string = (typeof string !== 'string')? string.val() : string;
+            valid_id_number: function(element){
+                var string = (typeof string !== 'string')? string.val() : string;
                 if ((string.length > 9) || (string.length < 5) || isNaN(string))
                     return false;
 
@@ -364,9 +373,9 @@
                 
                 return mone % 10 == 0;
             },
-            alpha: function(string){
+            alpha: function(element){
                 var re = /^((?![0-9\~\!\@\#\$\%\^\&\*\(\)\_\+\=\-\[\]\{\}\;\:\"\\\/\<\>\?]).)+$/g;
-                return re.test(string.val());
+                return re.test(element.val());
             }
         },
         postCORS: function(c, a, b, d) {
@@ -451,5 +460,7 @@
             }
         });
     }
+
+    window.Jetform = Jetform;
 
 }(jQuery));
