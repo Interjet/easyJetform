@@ -18,27 +18,33 @@
 				<form id="jetform">
 					<div class="form-group">
 						<label for="firstName">שם פרטי</label>
-						<input class="form-control" required id="firstName" type="text" placeholder="שם פרטי" name="jf_txt_1">
+						<input class="form-control" required id="firstName" type="text" placeholder="שם פרטי" data-validate="required|min_length[2]" name="jf_txt_1">
+						<div class="input-error"></div>
 					</div>
 					<div class="form-group">
 						<label for="lastName">שם משפחה</label>
 						<input class="form-control" id="lastName" placeholder="שם משפחה" type="text" name="jf_txt_2">
+						<div class="input-error"></div>
 					</div>
 					<div class="form-group">
 						<label for="emailInput">כתובת מייל</label>
-						<input class="form-control" id="emailInput" placeholder="אימייל" required type="email" name="jf_txt_3">
+						<input class="form-control" id="emailInput" placeholder="אימייל" required type="email" data-validate="required|valid_email" name="jf_txt_3">
+						<div class="input-error"></div>
 					</div>
 					<div class="form-group">
 						<label for="telInput">טלפון</label>
-						<input class="form-control" id="telInput" maxlength="11" type="tel" name="jf_txt_4">
+						<input class="form-control" id="telInput" maxlength="10" type="tel" name="jf_txt_4" data-validate="required|integer">
+						<div class="input-error"></div>
 					</div>
 					<div class="form-group">
 						<label for="idInput">תעודת זהות</label>
 						<input class="form-control" id="idInput" data-idnumber type="number" name="jf_txt_9">
+						<div class="input-error"></div>
 					</div>
 					<div class="form-group">
 						<label for="textareaInput">שדה טקסט</label>
 						<textarea class="form-control" required name="jf_area_11" rows="5" id="textareaInput"></textarea>
+						<div class="input-error"></div>
 					</div>
 
 					<div class="form-group">
@@ -51,22 +57,26 @@
 							<option value="4">4</option>
 							<option value="5">5</option>
 						</select>
+						<div class="input-error"></div>
 					</div>
 
 					<div class="form-group">
 						<label for="textInput">הודעת שגיאה מותאמת</label>
-						<input class="form-control" id="textInput" required type="text" data-error="חמוצים" name="jf_txt_12">
+						<input class="form-control" id="textInput" required type="text" name="jf_txt_12">
+						<div class="input-error"></div>
 					</div>
 
 					<div class="checkbox">
 						<label>
 							<input id="jf_chk_5" type="checkbox" required data-error="אמרתי חובה" name="jf_chk_5"> זה חובה
 						</label>
+						<div class="input-error"></div>
 					</div>
 					<div class="checkbox">
 						<label>
 							<input id="jf_chk_6" type="checkbox" name="jf_chk_6"> זה לא
 						</label>
+						<div class="input-error"></div>
 					</div>
 
 					<h4>תבחר אופציה</h4>
@@ -75,12 +85,14 @@
 							<input type="radio" name="jf_rdb_8" data-name="צבעים" id="optionsRadios1" value="כחול" required>
 							גלולה כחולה
 						</label>
+						<div class="input-error"></div>
 					</div>
 					<div class="radio">
 						<label>
 							<input type="radio" name="jf_rdb_8" data-name="צבעים" id="optionsRadios2" value="אדום" required>
 							גלולה אדומה
 						</label>
+						<div class="input-error"></div>
 					</div>
 					
 					<h4>עוד אופציה</h4>
@@ -89,12 +101,14 @@
 							<input type="radio" name="jf_rdb_9" data-name="מכשירים" id="optionsRadios3" value="כחול" required>
 							iPhone
 						</label>
+						<div class="input-error"></div>
 					</div>
 					<div class="radio">
 						<label>
 							<input type="radio" name="jf_rdb_9" data-name="מכשירים" id="optionsRadios4" value="אדום" required>
 							Android
 						</label>
+						<div class="input-error"></div>
 					</div>
 
 					<input type="hidden" name="jf_txt_10" value="שדה בלתי ניראה">
@@ -115,9 +129,14 @@
 	$(document).ready(function(){
 		$('#jetform').jetform({
 			token:'nZq6scKaNvcXdgjszIcN1kaHhbYDKjAAie0yPKyTVU4AiE0Aiv9VGKu0sH7fVqWhqEkRvUyhbApBpYRGmgPkZA==',
-			submitLoader: true,
-			alertErrors: false,
-			errorAtBottom: '#error-msg' //'#error-msg'
+			errorSelector: '.input-error',
+			resetErrorEvent: 'keypress',
+			onSuccess: function(args){
+				console.log(args);
+			},
+			onError: function(errors){
+				console.log(errors);
+			}
 		});
 	})
 	</script>
