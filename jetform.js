@@ -6,7 +6,7 @@
             errorSelector: false,
             autoValidate: false,
             autoSend: false,
-            resetErrorEvent: 'keyup',
+            resetErrorEvent: 'keydown',
             autoAlign: true,
             telMaxLength: 10,
             url: '//jetform.interjet.co.il/lead/save',
