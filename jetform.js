@@ -209,7 +209,7 @@
                 if($.inArray(error.field.attr('id'), displayedFields) < 0) {
                     if(this.showAllErrors) {
                         if(!!this.options.errorSelector) {
-                            error.field.parent().find(this.options.errorSelector).text(error.message).show();
+                            error.field.parent('div').find(this.options.errorSelector).text(error.message).show();
                             error.field.attr('aria-invalid', true);
                         } else {
                             alert(error.message);
