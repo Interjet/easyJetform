@@ -87,7 +87,7 @@ You can easily extend the validation engine by teaching it new validation rules.
 Before creating a Jetform instance add a new validation rule by extending the Jetform.Utils interface: <br>
 ```js
 Jetform.Utils.validations.is_dog = function(element){
-    return element.val() == 'woof-woof';
+    return element.val() == 'woof woof';
 }
 ```
 After creating the new validation rule, we need to setup the appropriate error message: <br>
