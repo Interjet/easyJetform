@@ -44,6 +44,7 @@ max_length[5] | The maximum allowed length of the input's value
 exact_length[6] | The exact allowed length of the input's value
 required | The field is required and must have a value
 integer | The value of the field must be numeric only
+alpha | The value of the field must contain alphbetic characters only
 valid_email | The value of the field must be a valid email
 valid_url | The value of the field must be a valid URL (Strict mode)
 valid_url[true] | The value of the field must be a valid URL (Loose mode)
