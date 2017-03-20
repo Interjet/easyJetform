@@ -22,7 +22,7 @@ autoAlign | Boolean | Should automatically align the text according to the place
 telMaxLength | Integer | The maximum length of inputs of type tel.
 url | String | The URL to which the form should be submited. Default: '//jetform.interjet.co.il/lead/save'
 template | Object | The validation engine messages. You can add new or overwrite the existing messages.
-spinner | Object | Properties for the spinner.
+[spinner](#spinner) | Object | Properties for the spinner.
 [permit](#permit) | Object | Permission for input characters to a specific input type.
 
 ### Events
@@ -106,10 +106,38 @@ Once we finished we can start using out new validation rule: <br>
 </div>
 ```
 
+### spinner
+You can control over the spinner that is shown in the input type submit while the data is being sent to Jetform. <br> 
+The avaliable properties are: <br>
+
+Name  | Description
+------------- | -------------
+active | Boolean.
+width | String. The width of the spinner (e.g. 20px)
+height | String. The height of the spinner (e.g. 20px)
+color | String. Hexadecimal value for the color of the spinner. 
+
+
+```js
+permit: {
+    email: {
+        rule: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+        event: 'keypress'
+    }
+}
+```
+
 ### permit
 You can disable certain characters from being typed in a certain input type. <br>
 The permission is given by specifying a regular expression and an event to check the expression against the values of the input (usually it will be done on keypress). 
-
+```js
+permit: {
+    email: {
+        rule: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+        event: 'keypress'
+    }
+}
+```
 
 ### Jetform.Utils interface
 Jetform.Utils is a static interface which is accessible from anywhere. <br>
