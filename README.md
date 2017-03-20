@@ -117,14 +117,12 @@ active | Boolean.
 width | String. The width of the spinner (e.g. 20px)
 height | String. The height of the spinner (e.g. 20px)
 color | String. Hexadecimal value for the color of the spinner. 
-
-
 ```js
-permit: {
-    email: {
-        rule: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-        event: 'keypress'
-    }
+spinner: {
+    active: true,
+    width: '30px',
+    height: '20px',
+    color: '#333'
 }
 ```
 
