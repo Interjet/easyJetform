@@ -1,25 +1,16 @@
 # easyJetform - v3.0.0.0
 
 Turn any form to a Jetform :)
-[Demo](http://www.interjet.co.il/camp/interjet/easyjetform/).
+[Demo](http://www.interjet.co.il/camp/interjet/easyjetform/v3/).
 
 ### Important
+<b>jQuery:</b><br>
+jQuery is required to work (any version is acceptable) <br>
 
-- Each input needs to have a ```name="..."``` attribute.
-- Each input needs to have a ```<label for="...">```.
-- A ```<div>``` needs to wrap the ```<label>``` and the ```<input>``` tags.
-- Load CSS.
-
-### Extras
-
-- If an input is required a ```required``` attribute should be added to the ```<input>```.
-- If input is ID number add ```data-idnumber``` attribute.
-- ```data-name="..."``` input name(for errors).
-- ```data-error="..."``` to display custom error.
-
+<b>Markup:</b><br>
+All the inputs should be wrapped in a container (e.g div) if you wish to present errors under each input. 
 
 ### Options
-
 Name  | Type | Description
 ------------- | ------------- | -------------
 token | String | The authentication token as revieved from Jetform. Default: ''
@@ -31,7 +22,6 @@ autoAlign | Boolean | Should automatically align the text according to the place
 url | String | The URL to which the form should be submited. Default: '//jetform.interjet.co.il/lead/save'
 
 ### Events
-
 Name  | Description
 ------------- | -------------
 beforeSubmit | Triggered before sending the input data to Jetform and after a successfull validation
@@ -40,7 +30,6 @@ onError | Triggered if errors were found in the form validation
 onFail | Triggered when an invalid response came from Jetform
 
 ### Validation rules
-
 Name  | Description
 ------------- | -------------
 min_length[2] | The minimal allowed length of the input's value
@@ -53,16 +42,37 @@ valid_url | The value of the field must be a valid URL (Strict mode)
 valid_url[true] | The value of the field must be a valid URL (Loose mode)
 valid_id_number | The value of the field must contain a valid id number
 
+##### Validation example
+```html
+<div class="form-group">
+    <label for="firstName">שם פרטי</label>
+    <input type="text" id="full_name" name="jf_txt_1" data-validate="min_length[2]|max_length[4]">
+</div>
+```
+
+##### Validation error detection
+There are 2 ways to detect errors when they occured: <br>
+<b>Class level event:</b> options.onError event will be triggered with an array of errors as a function argument
+```js
+onError: function(errors){
+    console.log(errors);
+}
+```
+<b>Element level event:</b> jetform.error event will be triggered with an error object as a function argument
+```js
+$('#full_name').on('jetform.error', function(event, error){
+    console.log(error);
+});
+```
 
 ### Example
-
-```
+```js
 $('#jetform').jetform({
-	token:'nZq6scKaNvcXdgjszIcN1kaHhbYDKjAAie0yPKyTVU4AiE0Aiv9VGKu0sH7fVqWhqEkRvUyhbApBpYRGmgPkZA==',
-	errorSelector: '.input-error',
-	resetErrorEvent: 'keypress',
-	onSuccess: function(){
-		alert('I am the king of the world!');
-	}
+    token:'nZq6scKaNvcXdgjszIcN1kaHhbYDKjAAie0yPKyTVU4AiE0Aiv9VGKu0sH7fVqWhqEkRvUyhbApBpYRGmgPkZA==',
+    errorSelector: '.input-error',
+    resetErrorEvent: 'keypress',
+    onSuccess: function(){
+        alert('I am the king of the world!');
+    }
 })
 ```
