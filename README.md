@@ -23,7 +23,7 @@ telMaxLength | Integer | The maximum length of inputs of type tel.
 url | String | The URL to which the form should be submited. Default: '//jetform.interjet.co.il/lead/save'
 template | Object | The validation engine messages. You can add new or overwrite the existing messages.
 spinner | Object | Properties for the spinner.
-permit (#permit) | Object | Permission for input characters to a specific input type.
+[permit](#permit) | Object | Permission for input characters to a specific input type.
 
 ### Events
 Name  | Description
