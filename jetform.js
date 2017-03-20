@@ -237,6 +237,11 @@
             // Reset the form
             this.form.trigger('reset');
 
+            // Auto Placeholders
+            if(this.options.autoAlign) {
+                this.inputTextFix();
+            }
+
             // Disable the submit button and add a spinner
             this.form.find('*[type="submit"]').prop('disabled', true).data('value', this.form.find('*[type="submit"]').text()).text(this.options.template.response.sending);
 
