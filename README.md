@@ -68,6 +68,16 @@ $('#full_name').on('jetform.error', function(event, error){
 });
 ```
 
+##### Error object
+Each error is an object with the following properties: <br>
+
+Name  | Description
+------------- | -------------
+field | A jQuery element object
+rule | The name of the validation rule which failed the validation process
+value | The value given in the rule for rules with values (otherwise equal to null)
+message | A human readable message taken from the template after being parsed by the validation engine 
+
 ##### Extending the validation engine
 You can easily extend the validation engine by teaching it new validation rules. <br>
 Before creating a Jetform instance add a new validation rule by extending the Jetform.Utils interface: <br>
@@ -92,14 +102,17 @@ Once we finished we can start using out new validation rule: <br>
 </div>
 ```
 
-### Example
+### Full example
 ```js
 $('form').jetform({
     token:'nZq6scKaNvcXdgjszIcN1kaHhbYDKjAAie0yPKyTVU4AiE0Aiv9VGKu0sH7fVqWhqEkRvUyhbApBpYRGmgPkZA==',
     errorSelector: '.input-error',
     resetErrorEvent: 'keypress',
-    onSuccess: function(){
+    onSuccess: function(args){
         alert('I am the king of the world!');
+    },
+    onError: function(errors){
+        alert('Ooops... something went wrong');
     }
 })
 ```
