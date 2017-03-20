@@ -1,7 +1,7 @@
 # easyJetform - v3.0.1
 
 Turn any form to a Jetform :)
-[Demo](http://www.interjet.co.il/camp/interjet/easyjetform/v3/).
+[Demo](https://interjet.github.io/easyJetform/).
 
 ### Important
 <b>jQuery:</b><br>
