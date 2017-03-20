@@ -19,13 +19,17 @@ autoValidate | Boolean | Should perform a validation immediately when an instanc
 autoSend | Boolean | Should send the data immediately when an instance is created. Default: false
 resetErrorEvent | String | The gesture which will trigger the error reset (e.g click / keypress). Default: false
 autoAlign | Boolean | Should automatically align the text according to the placeholder's or the value's direction. Default: true
+telMaxLength | Integer | The maximum length of inputs of type tel.
 url | String | The URL to which the form should be submited. Default: '//jetform.interjet.co.il/lead/save'
+template | Object | The validation engine messages. You can add new or overwrite the existing messages.
+spinner | Object | Properties for the spinner.
+permit (#permit) | Object | Permission for input characters to a specific input type.
 
 ### Events
 Name  | Description
 ------------- | -------------
-beforeSubmit | Triggered before sending the input data to Jetform and after a successfull validation
-onSuccess | Triggered after a successfull response came from Jetform
+beforeSubmit | Triggered before sending the input data to Jetform and after a successful validation
+onSuccess | Triggered after a successful response came from Jetform
 onError | Triggered if errors were found in the form validation
 onFail | Triggered when an invalid response came from Jetform
 
@@ -54,7 +58,7 @@ valid_id_number | The value of the field must contain a valid id number
 ```
 
 ##### Validation error detection
-There are 2 ways to detect errors when they occured: <br>
+There are 2 ways to detect errors when they occurred: <br>
 <b>Class level event:</b> onError event will be triggered with an array of errors as a function argument
 ```js
 onError: function(errors){
@@ -101,6 +105,22 @@ Once we finished we can start using out new validation rule: <br>
     <input type="text" id="full_name" name="jf_txt_1" data-validate="required|is_dog">
 </div>
 ```
+
+### permit
+You can disable certain characters from being typed in a certain input type. <br>
+The permission is given by specifying a regular expression and an event to check the expression against the values of the input (usually it will be done on keypress). 
+
+
+### Jetform.Utils interface
+Jetform.Utils is a static interface which is accessible from anywhere. <br>
+The interface contains several general purpose methods and properties: <br>
+
+Name  | Type | Description
+------------- | ------------- | ------------- 
+queryString | Method | Get a query string parameter
+validations | Object | The validation rules (functions) used by the engine
+postCORS | Method | Send an HTTP Cross-Origin POST request using xmlHttpRequest 2.0
+getCORS | Method | Send an HTTP Cross-Origin GET request using xmlHttpRequest 2.0 
 
 ### Full example
 ```js
