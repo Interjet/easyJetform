@@ -30,6 +30,9 @@ onError | Triggered if errors were found in the form validation
 onFail | Triggered when an invalid response came from Jetform
 
 ### Validation rules
+Jetform plugin include a validation parser and a custom error message template engine. <br>
+Validation rules are a string list separated by a pipe “|”. <br>
+
 Name  | Description
 ------------- | -------------
 min_length[2] | The minimal allowed length of the input's value
@@ -52,7 +55,7 @@ valid_id_number | The value of the field must contain a valid id number
 
 ##### Validation error detection
 There are 2 ways to detect errors when they occured: <br>
-<b>Class level event:</b> options.onError event will be triggered with an array of errors as a function argument
+<b>Class level event:</b> onError event will be triggered with an array of errors as a function argument
 ```js
 onError: function(errors){
     console.log(errors);
@@ -65,9 +68,33 @@ $('#full_name').on('jetform.error', function(event, error){
 });
 ```
 
+##### Extending the validation engine
+You can easily extend the validation engine by teaching it new validation rules. <br>
+Before creating a Jetform instance add a new validation rule by extending the Jetform.Utils interface: <br>
+```js
+Jetform.Utils.validations.is_dog = function(element){
+    return element.val() == 'woof-woof';
+}
+```
+After creating the new validation rule, we need to setup the appropriate error message: <br>
+```js
+$('form').jetform({
+    template: {
+        is_dog: "{$field} is not a dog"
+    }
+});
+```
+Once we finished we can start using out new validation rule: <br>
+```html
+<div class="form-group">
+    <label for="firstName">שם פרטי</label>
+    <input type="text" id="full_name" name="jf_txt_1" data-validate="required|is_dog">
+</div>
+```
+
 ### Example
 ```js
-$('#jetform').jetform({
+$('form').jetform({
     token:'nZq6scKaNvcXdgjszIcN1kaHhbYDKjAAie0yPKyTVU4AiE0Aiv9VGKu0sH7fVqWhqEkRvUyhbApBpYRGmgPkZA==',
     errorSelector: '.input-error',
     resetErrorEvent: 'keypress',
