@@ -52,7 +52,9 @@
 
         this.form = $(item);
         
-        this.fields = this.form.find('input, select, textarea');
+        this.fields = this.form.find('input, select, textarea').not(function(index, input){
+            return !$(input).attr('name');
+        });
         
         this.args = {
             token: options.token,
@@ -80,8 +82,10 @@
             // Add attributes to the base element
             this.form.attr('novalidate', true);
 
-            // Adding maxlength to inputs type tel
-            this.form.find('input[type="tel"]').attr('maxlength', this.options.telMaxLength);
+            // Adding maxlength to inputs type tel if not set already
+            this.form.find('input[type="tel"]').not(function(index, input){
+                return !!$(input).attr('maxlength');
+            }).attr('maxlength', this.options.telMaxLength);
 
             // Auto validate
             if(this.options.autoValidate) {
@@ -224,6 +228,10 @@
                     this.args[$(field).attr('name')] = $('input[name="' + $(field).attr('name') + '"]:checked').val()
                 } else{
                     this.args[$(field).attr('name')] = $(field).val();
+                    if($(field).data('prefix')){
+                        this.args[$(field).attr('name')] = this.args[$(field).attr('name')].replace(/^/,$($(field).data('prefix')).val());
+                        console.log(this.args[$(field).attr('name')]);
+                    }
                 }
             }, this));
         },
@@ -433,7 +441,8 @@
                 return re.test(element.val());
             },
             valid_phone: function(element){
-                var re = /^0(5[^7]|[2-4]|[8-9]|7[0-9])[0-9]{7}$/;
+                var re = "^" + (element.data('prefix') ? "" : "^0(5[^7]|[2-4]|[8-9]|7[0-9])") + "[0-9]{7}$";
+                var re = new RegExp(re);
                 return re.test(element.val());
             },
             valid_id_number: function(element){
