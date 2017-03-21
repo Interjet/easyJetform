@@ -18,7 +18,7 @@
 				<form id="jetform">
 					<div class="form-group">
 						<label for="firstName">שם פרטי</label>
-						<input class="form-control" id="firstName" type="text" placeholder="שם פרטי" data-validate="min_length[2]|max_length[4]" name="jf_txt_1">
+						<input class="form-control" id="firstName" type="text" placeholder="שם פרטי" name="jf_txt_1">
 						<div class="input-error"></div>
 					</div>
 					<div class="form-group">
@@ -38,7 +38,7 @@
 					</div>
 					<div class="form-group">
 						<label for="idInput">תעודת זהות</label>
-						<input class="form-control" id="idInput" type="number" data-validate="valid_id_number" name="jf_txt_9">
+						<input class="form-control" id="idInput" type="number" data-validate="greater_than[3]" name="jf_txt_9">
 						<div class="input-error"></div>
 					</div>
 					<div class="form-group">
