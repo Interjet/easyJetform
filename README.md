@@ -59,14 +59,15 @@ valid_id_number | The value of the field must contain a valid id number
 ```
 
 ##### Validation error detection
-There are 2 ways to detect errors when they occurred: <br>
+There are 2 ways to detect errors when they occure: <br>
 <b>Class level event:</b> onError event will be triggered with an array of errors as a function argument
 ```js
 onError: function(errors){
     console.log(errors);
 }
 ```
-<b>Element level event:</b> jetform.error event will be triggered with an error object as a function argument
+<b>Element level event:</b> jetform.error event will be triggered with an error object as a function argument. <br>
+Since each time only one validation error is desplayed for each field, the current error object will be passed as an argument.
 ```js
 $('#full_name').on('jetform.error', function(event, error){
     console.log(error);
