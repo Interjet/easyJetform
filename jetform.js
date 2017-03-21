@@ -21,6 +21,12 @@
                 valid_url: "{$field} אינו מכיל כתובת תקינה",
                 integer: "{$field} מכיל תווים לא מספריים",
                 alpha: "{$field} מכיל תווים אשר אינם אותיות",
+                equals: "הערכים אינם זהים",
+                in_list: "{$field} אינו מתוך רשימת הערכים המותרת",
+                greater_than: "{$field} צריך להיות יותר גדול מ-{$value}",
+                greater_than_equal_to: "{$field} צריך להיות יותר גדול או שווה ל-{$value}",
+                less_than: "{$field} צריך להיות יותר קטן מ-{$value}",
+                less_than_equal_to: "{$field} צריך להיות יותר קטן או שווה ל-{$value}",
                 response: {
                     sending: "שולח נתונים",
                     success: "הפרטים התקבלו בהצלחה",
@@ -72,6 +78,8 @@
 
         this.init();
     };
+
+    Jetform.version = '3.0.2';
 
     Jetform.prototype = {
         showAllErrors: false,
@@ -471,6 +479,24 @@
             alpha: function(element){
                 var re = /^((?![0-9\~\!\@\#\$\%\^\&\*\(\)\_\+\=\-\[\]\{\}\;\:\"\\\/\<\>\?]).)+$/g;
                 return re.test(element.val());
+            },
+            equals: function(element, value){
+                return element.val() == $(value).val();
+            },
+            in_list: function(element, value){
+                return $.inArray(element.val(), value.split(',')) > -1;
+            },
+            greater_than: function(element, value){
+                return element.val() > value;
+            },
+            greater_than_equal_to: function(element, value){
+                return element.val() >= value;
+            },
+            less_than: function(element, value){
+                return element.val() < value;
+            },
+            less_than_equal_to: function(element, value){
+                return element.val() <= value;
             }
         },
         postCORS: function(c, a, b, d) {
