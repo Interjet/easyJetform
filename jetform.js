@@ -62,7 +62,7 @@
         this.fields = this.form.find('input, select, textarea').not(function(index, input){
             return !$(input).attr('name');
         });
-        
+
         this.args = {
             token: options.token,
             ref: Jetform.Utils.queryString('ref') || '',
@@ -80,7 +80,7 @@
         this.init();
     };
 
-    Jetform.version = '3.0.54';
+    Jetform.version = '3.0.55';
 
     Jetform.prototype = {
         showAllErrors: false,
@@ -247,7 +247,7 @@
                     this.args[$(field).attr('name')] = $('input[name="' + $(field).attr('name') + '"]:checked').val()
                 } else{
                     if($(field).data('prefix')){
-                        this.args[$(field).attr('name')] = this.args[$(field).attr('name')].replace(/^/,$($(field).data('prefix')).val());
+                        this.args[$(field).attr('name')] = $(field).val().replace(/^/,$($(field).data('prefix')).val());
                     } else{   
                         this.args[$(field).attr('name')] = $(field).val();
                     }
