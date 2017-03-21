@@ -11,6 +11,7 @@
             telMaxLength: 10,
             url: '//jetform.interjet.co.il/lead/save',
             template: {
+                __default: "{$field} מכיל ערך אינו תקין",
                 required: "{$field} שדה חובה",
                 min_length: "{$field} חייב להיות באורך של {$value} תווים לפחות",
                 max_length: "{$field} חייב להיות לא יותר מ-{$value} תווים",
@@ -348,7 +349,8 @@
                 error = this.options.template[rule].replace('{$field}', element.data('name') || element.attr('placeholder') || element.parent().find('label').text() || element.parent().text());
                 error = (!!value) ? error.replace('{$value}', value) : error;
             } else {
-                error = 'Found error in ' + (element.data('name') || element.attr('placeholder') || element.parent().find('label').text() || element.parent().text()) + ' without a message';
+                error = this.options.template.__default.replace('{$field}', element.data('name') || element.attr('placeholder') || element.parent().find('label').text() || element.parent().text());
+                error = (!!value) ? error.replace('{$value}', value) : error;
             }
 
             return error;
