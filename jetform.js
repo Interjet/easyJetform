@@ -6,7 +6,7 @@
             errorSelector: false,
             autoValidate: false,
             autoSend: false,
-            resetErrorEvent: 'keydown',
+            resetErrorEvent: 'blur change keydown',
             autoAlign: true,
             telMaxLength: 10,
             url: '//jetform.interjet.co.il/lead/save',
@@ -213,6 +213,7 @@
         },
         resetFieldError: function(field){
             if(!!this.options.errorSelector) {
+                console.log(field)
                 field.closest('div').find(this.options.errorSelector).text('').hide();
                 field.attr('aria-invalid', true);
             } else {
@@ -227,10 +228,10 @@
                 } else if($(field).attr('type') == 'radio'){
                     this.args[$(field).attr('name')] = $('input[name="' + $(field).attr('name') + '"]:checked').val()
                 } else{
-                    this.args[$(field).attr('name')] = $(field).val();
                     if($(field).data('prefix')){
                         this.args[$(field).attr('name')] = this.args[$(field).attr('name')].replace(/^/,$($(field).data('prefix')).val());
-                        console.log(this.args[$(field).attr('name')]);
+                    } else{   
+                        this.args[$(field).attr('name')] = $(field).val();
                     }
                 }
             }, this));
@@ -441,8 +442,8 @@
                 return re.test(element.val());
             },
             valid_phone: function(element){
-                var re = "^" + (element.data('prefix') ? "" : "^0(5[^7]|[2-4]|[8-9]|7[0-9])") + "[0-9]{7}$";
-                var re = new RegExp(re);
+                var pattern = "^" + (element.data('prefix') ? "" : "0(5[^7]|[2-4]|[8-9]|7[0-9])") + "[0-9]{7}$";
+                var re = new RegExp(pattern);
                 return re.test(element.val());
             },
             valid_id_number: function(element){

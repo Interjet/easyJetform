@@ -18,22 +18,22 @@
 				<form id="jetform">
 					<div class="form-group">
 						<label for="firstName">שם פרטי</label>
-						<input class="form-control" id="firstName" type="text" placeholder="שם פרטי" data-validate="min_length[2]|max_length[4]" name="jf_txt_1">
+						<input class="form-control" id="firstName" type="text" required placeholder="שם פרטי" data-validate="min_length[2]|max_length[4]" name="jf_txt_1">
 						<div class="input-error"></div>
 					</div>
 					<div class="form-group">
 						<label for="lastName">שם משפחה</label>
-						<input class="form-control" id="lastName" placeholder="שם משפחה" type="text" data-validate="alpha" name="jf_txt_2">
+						<input class="form-control" id="lastName" required placeholder="שם משפחה" type="text" data-validate="alpha" name="jf_txt_2">
 						<div class="input-error"></div>
 					</div>
 					<div class="form-group">
 						<label for="emailInput">כתובת מייל</label>
-						<input class="form-control" id="emailInput" placeholder="אימייל" type="email" name="jf_txt_3">
+						<input class="form-control" id="emailInput" required placeholder="אימייל" type="email" name="jf_txt_3">
 						<div class="input-error"></div>
 					</div>
 					<div class="form-group">
 						<label for="telInput">טלפון</label>
-						<input class="form-control" id="telInput" type="tel" name="jf_txt_4">
+						<input class="form-control" id="telInput" required type="tel" name="jf_txt_4">
 						<div class="input-error"></div>
 					</div>
 					<div class="form-group">
@@ -74,7 +74,7 @@
 						</div>
 						<div class="form-group col-xs-4">
 							<label for="tel-prefix">קידומת</label>
-							<select required required id="tel-prefix" class="form-control">
+							<select required id="tel-prefix" class="form-control">
 								<option value="" selected disabled></option>
 								<option value="054">054</option>
 								<option value="050">050</option>
@@ -149,6 +149,7 @@
             $('#jetform').jetform({
 				token:'nZq6scKaNvcXdgjszIcN1kaHhbYDKjAAie0yPKyTVU4AiE0Aiv9VGKu0sH7fVqWhqEkRvUyhbApBpYRGmgPkZA==',
 				errorSelector: '.input-error',
+				resetErrorEvent: 'blur change',
 				onSuccess: function(args){
 					console.log(args);
 				},
