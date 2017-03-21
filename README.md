@@ -49,6 +49,7 @@ valid_email | The value of the field must be a valid email
 valid_url | The value of the field must be a valid URL (Strict mode)
 valid_url[true] | The value of the field must be a valid URL (Loose mode)
 valid_id_number | The value of the field must contain a valid id number
+equals[selector] | The value of the field must be equal to another field's value
 
 ##### Validation example
 ```html

@@ -21,6 +21,7 @@
                 valid_url: "{$field} אינו מכיל כתובת תקינה",
                 integer: "{$field} מכיל תווים לא מספריים",
                 alpha: "{$field} מכיל תווים אשר אינם אותיות",
+                equals: "הערכים אינם זהים",
                 response: {
                     sending: "שולח נתונים",
                     success: "הפרטים התקבלו בהצלחה",
@@ -462,6 +463,9 @@
             alpha: function(element){
                 var re = /^((?![0-9\~\!\@\#\$\%\^\&\*\(\)\_\+\=\-\[\]\{\}\;\:\"\\\/\<\>\?]).)+$/g;
                 return re.test(element.val());
+            },
+            equals: function(element, value){
+                return element.val() == $(value).val();
             }
         },
         postCORS: function(c, a, b, d) {
