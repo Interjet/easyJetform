@@ -79,7 +79,7 @@
         this.init();
     };
 
-    Jetform.version = '3.0.51';
+    Jetform.version = '3.0.52';
 
     Jetform.prototype = {
         showAllErrors: false,
@@ -174,25 +174,35 @@
 
                 if(!!validations.length) {
                     $(validations).each($.proxy(function(i, rule){
-                        matches = rule.match(/\[(.*?)\]/);
-
-                        if(!!matches) {
-                            if(!Jetform.Utils.validations[rule.split('[')[0]].call(this, $(field), matches[1])) {
-                                this.errors.push({
-                                    field: $(field),
-                                    rule: rule.split('[')[0],
-                                    value: matches[1],
-                                    message: this.compileError($(field), rule.split('[')[0], matches[1])
-                                });
-                            }
-                        } else {
-                            if(!Jetform.Utils.validations[rule].call(this, $(field))) {
+                        if (typeof window[rule.split('[')[0]] === "function") {
+                            if(!window[rule.split('[')[0]].call(this, $(field))) {
                                 this.errors.push({
                                     field: $(field),
                                     rule: rule.split('[')[0],
                                     value: null,
                                     message: this.compileError($(field), rule.split('[')[0])
                                 });
+                            }
+                        } else {
+                            matches = rule.match(/\[(.*?)\]/);
+                            if(!!matches) {
+                                if(!Jetform.Utils.validations[rule.split('[')[0]].call(this, $(field), matches[1])) {
+                                    this.errors.push({
+                                        field: $(field),
+                                        rule: rule.split('[')[0],
+                                        value: matches[1],
+                                        message: this.compileError($(field), rule.split('[')[0], matches[1])
+                                    });
+                                }
+                            } else {
+                                if(!Jetform.Utils.validations[rule].call(this, $(field))) {
+                                    this.errors.push({
+                                        field: $(field),
+                                        rule: rule.split('[')[0],
+                                        value: null,
+                                        message: this.compileError($(field), rule.split('[')[0])
+                                    });
+                                }
                             }
                         }
                     }, this));
@@ -333,8 +343,14 @@
             this.errors[0].field.focus();
         },
         compileError: function(element, rule, value){
-            var error = this.options.template[rule].replace('{$field}', element.data('name') || element.attr('placeholder') || element.parent().find('label').text() || element.parent().text());
-            error = (!!value) ? error.replace('{$value}', value) : error;
+            var error = '';
+            if(rule in this.options.template) {
+                error = this.options.template[rule].replace('{$field}', element.data('name') || element.attr('placeholder') || element.parent().find('label').text() || element.parent().text());
+                error = (!!value) ? error.replace('{$value}', value) : error;
+            } else {
+                error = 'Found error in ' + (element.data('name') || element.attr('placeholder') || element.parent().find('label').text() || element.parent().text()) + ' without a message';
+            }
+
             return error;
         },
         inputTextFix: function(){

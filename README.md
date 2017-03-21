@@ -1,4 +1,4 @@
-# easyJetform - v3.0.51
+# easyJetform - v3.0.52
 
 Turn any form to a Jetform :)
 [Demo](https://interjet.github.io/easyJetform/).
@@ -63,6 +63,31 @@ less_than_equal_to[12] | Value must be less or equal to
     <label for="firstName">שם פרטי</label>
     <input type="text" id="full_name" name="jf_txt_1" data-validate="min_length[2]|max_length[4]">
 </div>
+```
+
+##### Function based validation rules
+You can easily create your own validation function. <br>
+The validation function should be avaliable in the window scope. <br>
+Let's create a new function which checks the value of a given field: <br>
+```js
+function is_black(element) {
+    return element.val() == '#000';
+}
+```
+Now, we can start using this rule: <br>
+```html
+<div class="form-group">
+    <label for="myColor">שם פרטי</label>
+    <input type="text" id="myColor" name="colorPicker" data-validate="is_black">
+</div>
+```
+Optionaly, we can set an appropriate error message for the new rule: <br>
+```js
+$('form').jetform({
+    template: {
+        is_black: "{$field} is not black"
+    }
+});
 ```
 
 ##### Validation error detection
