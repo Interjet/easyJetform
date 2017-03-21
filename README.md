@@ -1,4 +1,4 @@
-# easyJetform - v3.0.2
+# easyJetform - v3.0.51
 
 Turn any form to a Jetform :)
 [Demo](https://interjet.github.io/easyJetform/).
@@ -8,7 +8,8 @@ Turn any form to a Jetform :)
 jQuery is required to work (any version is acceptable) <br>
 
 <b>Markup:</b><br>
-All the inputs should be wrapped in a container (e.g div) if you wish to present errors under each input. 
+All the inputs should be wrapped in a container (e.g div) if you wish to present errors under each input. <br>
+Only inputs with ```name``` property will be processed.
 
 ### Options
 Name  | Type | Description
@@ -113,6 +114,9 @@ Once we finished we can start using out new validation rule: <br>
     <input type="text" id="full_name" name="jf_txt_1" data-validate="required|is_dog">
 </div>
 ```
+
+### prefix support
+You can merge two inputs by adding ```data-prefix=#prefix-selector``` to the desired input. <br>
 
 ### spinner
 You can control over the spinner that is shown in the input type submit while the data is being sent to Jetform. <br> 
