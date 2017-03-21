@@ -9,7 +9,7 @@
             resetErrorEvent: 'blur change keydown',
             autoAlign: true,
             telMaxLength: 10,
-            url: '//jetform.interjet.co.il/lead/save',
+            url: 'https://jetform.interjet.co.il/lead/save',
             template: {
                 __default: "{$field} מכיל ערך אינו תקין",
                 required: "{$field} שדה חובה",
