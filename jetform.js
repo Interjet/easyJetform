@@ -22,6 +22,7 @@
                 integer: "{$field} מכיל תווים לא מספריים",
                 alpha: "{$field} מכיל תווים אשר אינם אותיות",
                 equals: "הערכים אינם זהים",
+                in_list: "{$field} אינו מתוך רשימת הערכים המותרת",
                 response: {
                     sending: "שולח נתונים",
                     success: "הפרטים התקבלו בהצלחה",
@@ -466,6 +467,9 @@
             },
             equals: function(element, value){
                 return element.val() == $(value).val();
+            },
+            in_list: function(element, value){
+                return $.inArray(element.val(), value.split(',')) > -1;
             }
         },
         postCORS: function(c, a, b, d) {
