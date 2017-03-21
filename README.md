@@ -51,6 +51,10 @@ valid_url[true] | The value of the field must be a valid URL (Loose mode)
 valid_id_number | The value of the field must contain a valid id number
 equals[selector] | The value of the field must be equal to another field's value
 in_list[a,b,c] | The value of the field must be one of the items
+greater_than[3] | The maximum allowed value for the input
+greater_than_equal_to[4] | Value must be greater or equal to
+less_than[6] | The minimum allowed value for the input
+less_than_equal_to[12] | Value must be less or equal to
 
 ##### Validation example
 ```html
