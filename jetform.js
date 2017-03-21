@@ -486,7 +486,7 @@
             },
             less_than_equal_to: function(element, value){
                 return element.val() <= value;
-            },
+            }
         },
         postCORS: function(c, a, b, d) {
             try {
