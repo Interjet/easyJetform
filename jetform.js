@@ -213,7 +213,6 @@
         },
         resetFieldError: function(field){
             if(!!this.options.errorSelector) {
-                console.log(field)
                 field.closest('div').find(this.options.errorSelector).text('').hide();
                 field.attr('aria-invalid', true);
             } else {
