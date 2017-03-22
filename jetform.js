@@ -80,7 +80,7 @@
         this.init();
     };
 
-    Jetform.version = '3.0.55';
+    Jetform.version = '3.0.6';
 
     Jetform.prototype = {
         showAllErrors: false,
