@@ -11,6 +11,7 @@
             telMaxLength: 10,
             url: '//jetform.interjet.co.il/lead/save',
             live: false,
+            liveEvent: 'keyup',
             template: {
                 __default: "{$field} מכיל ערך אינו תקין",
                 required: "{$field} שדה חובה",
@@ -135,20 +136,29 @@
                 if(!this.errors.length){
                     this.send();
                 } else {
-                    this.displayErrors();
+                    this.displayErrors(true);
                     this.options.onError.call(this, this.errors);
                 }
             }, this));
 
             // Live validation mode
             if(!!this.options.live) {
-                this.fields.on('keyup click', $.proxy(function(e){
-                    this.reset();
+                this.fields.on(this.options.liveEvent, $.proxy(function(e){
+
+                    // Removing errors related to this field
+                    if(!!this.errors.length) {
+                        $(this.errors).each($.proxy(function (index, error) {
+                            if (error.field.get(0) == e.target) {
+                                this.errors.splice(index, 1);
+                            }
+                        }, this));
+                    }
+
+
+                    this.resetFieldError($(event.target));
                     this.validateField(e.target);
                     if(!!this.errors.length) {
                         this.displayErrors();
-                    } else {
-                        this.resetFieldError($(event.target));
                     }
                 }, this));
             }
@@ -328,7 +338,7 @@
 
             }, this));
         },
-        displayErrors: function(){
+        displayErrors: function(focus){
             var displayedFields = [];
 
             // Display all the errors
@@ -359,8 +369,10 @@
                 }
             }, this));
 
-            // Focus the first field
-            this.errors[0].field.focus();
+            if(!!focus) {
+                // Focus the first field
+                this.errors[0].field.focus();
+            }
         },
         compileError: function(element, rule, value){
             var error = '';
