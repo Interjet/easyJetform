@@ -10,6 +10,7 @@
             autoAlign: true,
             telMaxLength: 10,
             url: '//jetform.interjet.co.il/lead/save',
+            live: false,
             template: {
                 __default: "{$field} מכיל ערך אינו תקין",
                 required: "{$field} שדה חובה",
@@ -138,46 +139,84 @@
                     this.options.onError.call(this, this.errors);
                 }
             }, this));
+
+            // Live validation mode
+            if(!!this.options.live) {
+                this.fields.on('keyup click', $.proxy(function(e){
+                    this.reset();
+                    this.validateField(e.target);
+                    if(!!this.errors.length) {
+                        this.displayErrors();
+                    } else {
+                        this.resetFieldError($(event.target));
+                    }
+                }, this));
+            }
         },
         validate: function() {
             var matches = [], validations = [];
 
             // Validate the inputs using our validation engine
             this.fields.each($.proxy(function(index, field){
-                validations = [];
+                this.validateField(field);
+            }, this));
+        },
+        validateField: function(field){
+            var matches = [], validations = [];
 
-                if(!!$(field).data('validate')) {
-                    validations = $.merge($(field).data('validate').split('|'), validations);
-                }
+            if(!!$(field).data('validate')) {
+                validations = $.merge($(field).data('validate').split('|'), validations);
+            }
 
-                // Adding the required validation in case of the required attribute presence
-                if(!!$(field).prop('required')){
-                    validations = ($.inArray('required', validations) < 0)? $.merge(validations, ['required']) : validations;
-                }
+            // Adding the required validation in case of the required attribute presence
+            if(!!$(field).prop('required')){
+                validations = ($.inArray('required', validations) < 0)? $.merge(validations, ['required']) : validations;
+            }
 
-                // Adding the valid_email validation to fields of type email
-                if($(field).attr('type') == 'email') {
-                    validations = ($.inArray('valid_email', validations) < 0)? $.merge(validations, ['valid_email']) : validations;
-                }
+            // Adding the valid_email validation to fields of type email
+            if($(field).attr('type') == 'email') {
+                validations = ($.inArray('valid_email', validations) < 0)? $.merge(validations, ['valid_email']) : validations;
+            }
 
-                // Adding the valid_phone validation to fields of type tel
-                if($(field).attr('type') == 'tel') {
-                    var arr = jQuery.grep(validations, function( n, i ) {
-                        return ( n.indexOf('max_length') > -1 || n.indexOf('min_length') > -1 );
-                    });
+            // Adding the valid_phone validation to fields of type tel
+            if($(field).attr('type') == 'tel') {
+                var arr = jQuery.grep(validations, function( n, i ) {
+                    return ( n.indexOf('max_length') > -1 || n.indexOf('min_length') > -1 );
+                });
 
-                    validations = ($.inArray('valid_phone', validations) < 0 && !arr.length)? $.merge(validations, ['valid_phone']) : validations;
-                }
+                validations = ($.inArray('valid_phone', validations) < 0 && !arr.length)? $.merge(validations, ['valid_phone']) : validations;
+            }
 
-                // Skip fields without value and without a required rule
-                if($.inArray('required', validations) < 0 && !$(field).val().length){
-                    return;
-                }
+            // Skip fields without value and without a required rule
+            if($.inArray('required', validations) < 0 && !$(field).val().length){
+                return;
+            }
 
-                if(!!validations.length) {
-                    $(validations).each($.proxy(function(i, rule){
-                        if (typeof window[rule.split('[')[0]] === "function") {
-                            if(!window[rule.split('[')[0]].call(this, $(field))) {
+            if(!!validations.length) {
+                $(validations).each($.proxy(function(i, rule){
+                    if (typeof window[rule.split('[')[0]] === "function") {
+                        if(!window[rule.split('[')[0]].call(this, $(field))) {
+                            this.errors.push({
+                                field: $(field),
+                                rule: rule.split('[')[0],
+                                value: null,
+                                message: this.compileError($(field), rule.split('[')[0])
+                            });
+                        }
+                    } else {
+                        matches = rule.match(/\[(.*)\]/i);
+
+                        if(!!matches) {
+                            if(!Jetform.Utils.validations[rule.split('[')[0]].call(this, $(field), matches[1])) {
+                                this.errors.push({
+                                    field: $(field),
+                                    rule: rule.split('[')[0],
+                                    value: matches[1],
+                                    message: this.compileError($(field), rule.split('[')[0], matches[1])
+                                });
+                            }
+                        } else {
+                            if(!Jetform.Utils.validations[rule].call(this, $(field))) {
                                 this.errors.push({
                                     field: $(field),
                                     rule: rule.split('[')[0],
@@ -185,32 +224,10 @@
                                     message: this.compileError($(field), rule.split('[')[0])
                                 });
                             }
-                        } else {
-                            matches = rule.match(/\[(.*)\]/i);
-
-                            if(!!matches) {
-                                if(!Jetform.Utils.validations[rule.split('[')[0]].call(this, $(field), matches[1])) {
-                                    this.errors.push({
-                                        field: $(field),
-                                        rule: rule.split('[')[0],
-                                        value: matches[1],
-                                        message: this.compileError($(field), rule.split('[')[0], matches[1])
-                                    });
-                                }
-                            } else {
-                                if(!Jetform.Utils.validations[rule].call(this, $(field))) {
-                                    this.errors.push({
-                                        field: $(field),
-                                        rule: rule.split('[')[0],
-                                        value: null,
-                                        message: this.compileError($(field), rule.split('[')[0])
-                                    });
-                                }
-                            }
                         }
-                    }, this));
-                }
-            }, this));
+                    }
+                }, this));
+            }
         },
         setFieldsPermissions: function(){
             this.fields.each($.proxy(function(index, field){
