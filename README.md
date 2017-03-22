@@ -74,7 +74,7 @@ function is_black(element) {
     return element.val() == '#000';
 }
 ```
-Now, we can start using this rule: <br>
+Now, we can start using it as a validation rule: <br>
 ```html
 <div class="form-group">
     <label for="myColor">שם פרטי</label>
