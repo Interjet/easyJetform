@@ -28,6 +28,7 @@
                 greater_than_equal_to: "{$field} צריך להיות יותר גדול או שווה ל-{$value}",
                 less_than: "{$field} צריך להיות יותר קטן מ-{$value}",
                 less_than_equal_to: "{$field} צריך להיות יותר קטן או שווה ל-{$value}",
+                regexp: "{$field} מכיל ערך אינו תקין!",
                 response: {
                     sending: "שולח נתונים",
                     success: "הפרטים התקבלו בהצלחה",
@@ -185,7 +186,8 @@
                                 });
                             }
                         } else {
-                            matches = rule.match(/\[(.*?)\]/);
+                            matches = rule.match(/\[(.*)\]/i);
+
                             if(!!matches) {
                                 if(!Jetform.Utils.validations[rule.split('[')[0]].call(this, $(field), matches[1])) {
                                     this.errors.push({
@@ -515,6 +517,10 @@
             },
             less_than_equal_to: function(element, value){
                 return element.val() <= value;
+            },
+            regexp: function(element, value){
+                var re = new RegExp(value);
+                return re.test(element.val());
             }
         },
         postCORS: function(c, a, b, d) {
