@@ -1,4 +1,4 @@
-# easyJetform - v3.0.6
+# easyJetform - v3.0.7
 
 Turn any form to a Jetform :)
 [Demo](https://interjet.github.io/easyJetform/).
@@ -19,6 +19,7 @@ errorSelector | String | The element in which the errors will appear. Default: f
 autoValidate | Boolean | Should perform a validation immediately when an instance is created. Default: false
 autoSend | Boolean | Should send the data immediately when an instance is created. Default: false
 resetErrorEvent | String | The gesture which will trigger the error reset (e.g click / keypress). Default: false
+live | Boolean | Live validation mode. errors are displayed as you type.
 autoAlign | Boolean | Should automatically align the text according to the placeholder's or the value's direction. Default: true
 telMaxLength | Integer | The maximum length of inputs of type tel.
 url | String | The URL to which the form should be submited. Default: '//jetform.interjet.co.il/lead/save'
