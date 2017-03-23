@@ -46,12 +46,14 @@
             },
             permit: {
                 tel: {
-                    rule: /^\d+$/,
-                    event: 'keypress'
+                    handler: function(event){
+                        $(event.target).val($(event.target).val().replace(/[^0-9]/g, ''));
+                    },
+                    event: 'input'
                 },
                 number: {
                     rule: /^\d+$/,
-                    event: 'keypress'
+                    event: 'keydown keypress'
                 }
             },
             beforeSubmit: function(args){},
@@ -83,7 +85,7 @@
         this.init();
     };
 
-    Jetform.version = '3.0.7';
+    Jetform.version = '3.0.8';
 
     Jetform.prototype = {
         showAllErrors: false,
@@ -114,8 +116,10 @@
                 this.inputTextFix();
             }
 
-            // Set fields permissions
-            this.setFieldsPermissions();
+            if(!!this.options.permit) {
+                // Set fields permissions
+                this.setFieldsPermissions();
+            }
 
             // Submit event handler
             this.form.on('submit', $.proxy(function(event){
@@ -242,8 +246,8 @@
         setFieldsPermissions: function(){
             this.fields.each($.proxy(function(index, field){
                 if(!!this.options.permit[$(field).attr('type')]) {
-                    $(field).on(this.options.permit[$(field).attr('type')].event, $.proxy(function(event){
-                        if(!this.options.permit[$(field).attr('type')].rule.test(event.key)) {
+                    $(field).on(this.options.permit[$(field).attr('type')].event, this.options.permit[$(field).attr('type')].handler || $.proxy(function(event){
+                        if(!this.options.permit[$(field).attr('type')].rule.test(event.key || String.fromCharCode(event.keyCode))) {
                             return false;
                         }
                     }, this));
