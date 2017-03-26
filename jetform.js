@@ -490,7 +490,7 @@
                 } else if(element.attr('type') == 'radio'){
                     return this.form.find('input[name="' + element.attr('name') + '"]:checked').length > 0
                 } else{
-                    return !!element.val().length;
+                    return !!$.trim(element.val()).length;
                 }
             },
             integer: function(element){
