@@ -17,6 +17,8 @@
                 required: "{$field} שדה חובה",
                 min_length: "{$field} חייב להיות באורך של {$value} תווים לפחות",
                 max_length: "{$field} חייב להיות לא יותר מ-{$value} תווים",
+                min_words: "{$field} חייב להיות באורך של {$value} מילים לפחות",
+                max_words: "{$field} חייב להיות לא יותר מ-{$value} מילים",
                 exact_length: "{$field} חייב להיות באורך של {$value} תווים",
                 valid_email: "{$field} אינו מכיל כתובת דואל תקינה",
                 valid_phone: "{$field} אינו מכיל מספר טלפון תקין",
@@ -556,7 +558,21 @@
             regexp: function(element, value){
                 var re = new RegExp(value);
                 return re.test(element.val());
-            }
+            },
+            min_words: function(element, value){
+                if(!element.val().length) {
+                    return false;
+                } else {
+                    return element.val().split(' ').length >= value;
+                }
+            },
+            max_words: function(element, value){
+                if(!element.val().length) {
+                    return true;
+                } else {
+                    return element.val().split(' ').length <= value;
+                }
+            },
         },
         postCORS: function(c, a, b, d) {
             try {
