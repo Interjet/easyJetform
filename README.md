@@ -48,6 +48,8 @@ exact_length[6] | The exact allowed length of the input's value
 required | The field is required and must have a value
 integer | The value of the field must be numeric only
 alpha | The value of the field must contain alphbetic characters only
+min_words[2] | The minimal allowed number of words in the input's value
+max_words[5] | The maximum allowed number of words in the input's value
 regexp[^[A-Za-z\s]+$] | The value must match the supplied regular expression
 valid_email | The value of the field must be a valid email
 valid_url | The value of the field must be a valid URL (Strict mode)
