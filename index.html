@@ -18,12 +18,12 @@
 				<form id="jetform">
 					<div class="form-group">
 						<label for="firstName">שם פרטי</label>
-						<input class="form-control" id="firstName" type="text" placeholder="שם פרטי" data-validate="min_words[2]" name="jf_txt_1">
+						<input class="form-control" id="firstName" type="text" placeholder="שם פרטי" data-validate="required|min_words[2]" name="jf_txt_1">
 						<div class="input-error"></div>
 					</div>
 					<div class="form-group">
 						<label for="lastName">שם משפחה</label>
-						<input class="form-control" id="lastName" placeholder="שם משפחה" type="text" name="jf_txt_2">
+						<input class="form-control" id="lastName" placeholder="שם משפחה" type="text" name="jf_txt_2" required>
 						<div class="input-error"></div>
 					</div>
 					<div class="form-group">
