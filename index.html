@@ -18,12 +18,12 @@
 				<form id="jetform">
 					<div class="form-group">
 						<label for="firstName">שם פרטי</label>
-						<input class="form-control" id="firstName" type="text" placeholder="שם פרטי" data-validate="required" name="jf_txt_1">
+						<input class="form-control" id="firstName" type="text" placeholder="שם פרטי" name="jf_txt_1">
 						<div class="input-error"></div>
 					</div>
 					<div class="form-group">
 						<label for="lastName">שם משפחה</label>
-						<input class="form-control" id="lastName" placeholder="שם משפחה" type="text" data-validate="alpha|equals[#firstName]" name="jf_txt_2">
+						<input class="form-control" id="lastName" placeholder="שם משפחה" type="text" name="jf_txt_2">
 						<div class="input-error"></div>
 					</div>
 					<div class="form-group">
@@ -38,18 +38,18 @@
 					</div>
 					<div class="form-group">
 						<label for="idInput">תעודת זהות</label>
-						<input class="form-control" id="idInput" type="number" data-validate="greater_than[3]" name="jf_txt_9">
+						<input class="form-control" id="idInput" type="number" name="jf_txt_9">
 						<div class="input-error"></div>
 					</div>
 					<div class="form-group">
 						<label for="textareaInput">שדה טקסט</label>
-						<textarea class="form-control" required name="jf_area_11" rows="5" id="textareaInput"></textarea>
+						<textarea class="form-control" name="jf_area_11" rows="5" id="textareaInput"></textarea>
 						<div class="input-error"></div>
 					</div>
 
 					<div class="form-group">
 						<label for="selectInput">תבחר מספר</label>
-						<select id="selectInput" required name="jf_combo_7" class="form-control" data-validate="required">
+						<select id="selectInput" name="jf_combo_7" class="form-control">
 							<option value="" selected disabled>בחר</option>
 							<option value="1">1</option>
 							<option value="2">2</option>
@@ -62,19 +62,19 @@
 
 					<div class="form-group">
 						<label for="textInput">הודעת שגיאה מותאמת</label>
-						<input class="form-control" id="textInput" required type="text" name="jf_txt_12">
+						<input class="form-control" id="textInput" type="text" name="jf_txt_12">
 						<div class="input-error"></div>
 					</div>
 					
 					<div class="row">
 						<div class="form-group col-xs-8">
 							<label for="tel-suffix">מספר טלפון</label>
-							<input type="tel" name="jf_txt_13" maxlength="7" required id="tel-suffix" data-prefix="#tel-prefix" class="form-control">
+							<input type="tel" name="jf_txt_13" maxlength="7" id="tel-suffix" data-prefix="#tel-prefix" class="form-control">
 							<div class="input-error"></div>
 						</div>
 						<div class="form-group col-xs-4">
 							<label for="tel-prefix">קידומת</label>
-							<select required id="tel-prefix" class="form-control">
+							<select id="tel-prefix" class="form-control">
 								<option value="" selected disabled></option>
 								<option value="054">054</option>
 								<option value="050">050</option>
@@ -88,7 +88,7 @@
 
 					<div class="checkbox">
 						<label>
-							<input id="jf_chk_5" type="checkbox" required name="jf_chk_5"> זה חובה
+							<input id="jf_chk_5" type="checkbox" name="jf_chk_5"> זה חובה
 						</label>
 						<div class="input-error"></div>
 					</div>
@@ -102,12 +102,12 @@
 					<h4>תבחר אופציה</h4>
 					<div class="radio">
 						<label>
-							<input type="radio" name="jf_rdb_8" data-name="צבעים" id="optionsRadios1" data-validate="required" value="כחול" required>
+							<input type="radio" name="jf_rdb_8" data-name="צבעים" id="optionsRadios1" value="כחול">
 							גלולה כחולה
 						</label>
                         <br>
 						<label>
-							<input type="radio" name="jf_rdb_8" data-name="צבעים" id="optionsRadios2" data-validate="required" value="אדום" required>
+							<input type="radio" name="jf_rdb_8" data-name="צבעים" id="optionsRadios2" value="אדום">
 							גלולה אדומה
 						</label>
 						<div class="input-error"></div>
@@ -116,14 +116,14 @@
 					<h4>עוד אופציה</h4>
 					<div class="radio">
 						<label>
-							<input type="radio" name="jf_rdb_9" data-name="מכשירים" id="optionsRadios3" value="כחול" required>
+							<input type="radio" name="jf_rdb_9" data-name="מכשירים" id="optionsRadios3" value="כחול">
 							iPhone
 						</label>
 						<div class="input-error"></div>
 					</div>
 					<div class="radio">
 						<label>
-							<input type="radio" name="jf_rdb_9" data-name="מכשירים" id="optionsRadios4" value="אדום" required>
+							<input type="radio" name="jf_rdb_9" data-name="מכשירים" id="optionsRadios4" value="אדום">
 							Android
 						</label>
 						<div class="input-error"></div>
@@ -150,6 +150,9 @@
 				token:'nZq6scKaNvcXdgjszIcN1kaHhbYDKjAAie0yPKyTVU4AiE0Aiv9VGKu0sH7fVqWhqEkRvUyhbApBpYRGmgPkZA==',
 				errorSelector: '.input-error',
 				live: true,
+				beforeSubmit: function(args){
+				    return false;
+				},
 				onSuccess: function(args){
 					console.log(args);
 				},

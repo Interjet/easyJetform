@@ -289,7 +289,9 @@
         },
         send: function() {
             // Call the event handler
-            this.options.beforeSubmit.call(this, this.args);
+            if(!this.options.beforeSubmit.call(this, this.args)){
+                return false;
+            }
 
             // Collect the input data
             this.collectInputData();
