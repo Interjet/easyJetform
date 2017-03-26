@@ -204,7 +204,7 @@
             }
 
             // Skip fields without value and without a required rule
-            if($.inArray('required', validations) < 0 && !$(field).val().length){
+            if($.inArray('required', validations) < 0 && !$.trim($(field).val()).length){
                 return;
             }
 
