@@ -291,7 +291,7 @@
         },
         send: function() {
             // Call the event handler
-            if(!this.options.beforeSubmit.call(this, this.args)){
+            if(this.options.beforeSubmit.call(this, this.args) === false){
                 return false;
             }
 
