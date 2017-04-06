@@ -384,7 +384,9 @@
         },
         compileError: function(element, rule, value){
             var error = '';
-            if(rule in this.options.template) {
+            if(element.attr('id') in this.options.template){
+                error = this.options.template[element.attr('id')].replace('{$field}', element.data('name') || element.attr('placeholder') || element.parent().find('label').text() || element.parent().text());
+            } else if(rule in this.options.template) {
                 error = this.options.template[rule].replace('{$field}', element.data('name') || element.attr('placeholder') || element.parent().find('label').text() || element.parent().text());
                 error = (!!value) ? error.replace('{$value}', value) : error;
             } else {
