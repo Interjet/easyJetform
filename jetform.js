@@ -290,6 +290,9 @@
             }, this));
         },
         send: function() {
+            // Collect the input data
+            this.collectInputData();
+
             // Call the event handler
             if(this.options.beforeSubmit.call(this, this.args) === false){
                 return false;
