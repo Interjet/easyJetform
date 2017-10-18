@@ -86,11 +86,29 @@ Now, we can start using it as a validation rule: <br>
     <input type="text" id="myColor" name="colorPicker" data-validate="is_black">
 </div>
 ```
-Optionaly, we can set an appropriate error message for the new rule: <br>
+Optionally, we can set an appropriate error message for the new rule: <br>
 ```js
 $('form').jetform({
     template: {
         is_black: "{$field} is not black"
+    }
+});
+```
+
+##### Custom error messages
+It is also possible to define a custom error message (ignoring the actual error) <br>
+This error message will pop every time a validation rule failed to validate the field's value 
+```html
+<div class="form-group">
+    <label for="myColor">Fullname</label>
+    <input type="text" id="myColor" name="colorPicker" data-error="custom_error" data-validate="required|min_words[2]">
+</div>
+```
+Don't forget to define the custom message's template: <br>
+```js
+$('form').jetform({
+    template: {
+        custom_error: "{$field} contain invalid value"
     }
 });
 ```
