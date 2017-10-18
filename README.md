@@ -65,8 +65,8 @@ less_than_equal_to[12] | Value must be less or equal to
 ##### Validation example
 ```html
 <div class="form-group">
-    <label for="firstName">שם פרטי</label>
-    <input type="text" id="full_name" name="jf_txt_1" data-validate="min_length[2]|max_length[4]">
+    <label for="firstName">Firstname</label>
+    <input type="text" id="first_name" name="jf_txt_1" data-validate="min_length[2]|max_length[4]">
 </div>
 ```
 
@@ -82,15 +82,33 @@ function is_black(element) {
 Now, we can start using it as a validation rule: <br>
 ```html
 <div class="form-group">
-    <label for="myColor">שם פרטי</label>
+    <label for="myColor">Choose color</label>
     <input type="text" id="myColor" name="colorPicker" data-validate="is_black">
 </div>
 ```
-Optionaly, we can set an appropriate error message for the new rule: <br>
+Optionally, we can set an appropriate error message for the new rule: <br>
 ```js
 $('form').jetform({
     template: {
         is_black: "{$field} is not black"
+    }
+});
+```
+
+##### Custom error messages
+It is also possible to define a custom error message (ignoring the actual error) <br>
+This error message will pop every time a validation rule failed to validate the field's value 
+```html
+<div class="form-group">
+    <label for="fullname">Fullname</label>
+    <input type="text" id="fullname" name="colorPicker" data-error="custom_error" data-validate="required|min_words[2]">
+</div>
+```
+Don't forget to define the custom message's template: <br>
+```js
+$('form').jetform({
+    template: {
+        custom_error: "{$field} contain invalid value"
     }
 });
 ```
@@ -140,7 +158,7 @@ $('form').jetform({
 Once we finished we can start using out new validation rule: <br>
 ```html
 <div class="form-group">
-    <label for="firstName">שם פרטי</label>
+    <label for="firstName">Fullname</label>
     <input type="text" id="full_name" name="jf_txt_1" data-validate="required|is_dog">
 </div>
 ```
