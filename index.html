@@ -18,7 +18,7 @@
 				<form id="jetform">
 					<div class="form-group">
 						<label for="firstName">שם פרטי</label>
-						<input class="form-control" id="firstName" type="text" placeholder="שם פרטי" data-error="custom_error" data-validate="required|min_words[2]" name="jf_txt_1">
+						<input class="form-control" id="firstName" type="text" placeholder="שם פרטי" data-error="custom_error" data-validate="required" name="jf_txt_1">
 						<div class="input-error"></div>
 					</div>
 					<div class="form-group">
@@ -69,7 +69,7 @@
 					<div class="row">
 						<div class="form-group col-xs-8">
 							<label for="tel-suffix">מספר טלפון</label>
-							<input type="tel" name="jf_txt_13" maxlength="7" id="tel-suffix" data-prefix="#tel-prefix" class="form-control">
+							<input type="tel" name="jf_txt_13" maxlength="10" id="tel-suffix" class="form-control">
 							<div class="input-error"></div>
 						</div>
 						<div class="form-group col-xs-4">
@@ -132,13 +132,9 @@
 					<input type="hidden" name="jf_txt_10" value="שדה בלתי ניראה">
 
 					<button type="submit" class="btn btn-default">שלח</button>
+                    <div class="input-error"></div>
 				</form>
 
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-xs-12">
-				<p id="errors">שגיאה: <span id="error-msg"></span></p>
 			</div>
 		</div>
 	</div>
@@ -149,6 +145,7 @@
             $('#jetform').jetform({
 				token:'nZq6scKaNvcXdgjszIcN1kaHhbYDKjAAie0yPKyTVU4AiE0Aiv9VGKu0sH7fVqWhqEkRvUyhbApBpYRGmgPkZA==',
 				errorSelector: '.input-error',
+                hideSuccessAfter: 2,
 				template:{
 					custom_error: '{$field} בעל הודעה מותאמת'
 				},
@@ -157,7 +154,13 @@
 				},
 				onError: function(errors){
 					console.log(errors);
-				}
+				},
+                spinner: {
+                    active: true,
+                    width: '30px',
+                    height: '20px',
+                    color: '#333'
+                }
 			});
 		});
 	</script>

@@ -16,6 +16,7 @@ Name  | Type | Description
 ------------- | ------------- | -------------
 token | String | The authentication token as revieved from Jetform. Default: ''
 errorSelector | String | The element in which the errors will appear. Default: false
+hideSuccessAfter | Integer | Number of seconds to display the success message. Default: false
 autoValidate | Boolean | Should perform a validation immediately when an instance is created. Default: false
 autoSend | Boolean | Should send the data immediately when an instance is created. Default: false
 resetErrorEvent | String | The gesture which will trigger the error reset (e.g click / keypress). Default: false

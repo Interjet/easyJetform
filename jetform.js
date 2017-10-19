@@ -4,6 +4,7 @@
         this.options = $.extend(true, {
             token: false,
             errorSelector: false,
+            hideSuccessAfter: false,
             autoValidate: false,
             autoSend: false,
             resetErrorEvent: 'blur change keydown',
@@ -311,7 +312,7 @@
 
             // Disable the submit button and add a spinner
             this.form.find('*[type="submit"]').prop('disabled', true).data('value', this.form.find('*[type="submit"]').text()).text(this.options.template.response.sending);
-
+            
             if(this.options.spinner.active){
                 // Append the spinner
                 this.form.find('*[type="submit"]').append(this.getSpinner());
@@ -331,6 +332,17 @@
                         });
                         
                         dataLayer.push(layer);
+                    }
+
+                    // Display the success message
+                    if(this.form.find('*[type="submit"]').next(this.options.errorSelector).length) {
+                        this.form.find('*[type="submit"]').next(this.options.errorSelector).text(this.options.template.response.success);
+
+                        if (!!this.options.hideSuccessAfter) {
+                            window.setTimeout($.proxy(function(){
+                                this.form.find('*[type="submit"]').next(this.options.errorSelector).text('');
+                            }, this), this.options.hideSuccessAfter * 1000);
+                        }
                     }
 
                     this.options.onSuccess.call(this, this.args);
