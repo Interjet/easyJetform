@@ -335,15 +335,26 @@
                     }
 
                     // Display the success message
-                    if(this.form.find('*[type="submit"]').next(this.options.errorSelector).length) {
-                        this.form.find('*[type="submit"]').next(this.options.errorSelector).text(this.options.template.response.success);
+                    if(this.showAllErrors) {
+                        if(this.form.find('*[type="submit"]').next(this.options.errorSelector).length) {
+                            this.form.find('*[type="submit"]').next(this.options.errorSelector).text(this.options.template.response.success).show();
+
+                            if (!!this.options.hideSuccessAfter) {
+                                window.setTimeout($.proxy(function(){
+                                    this.form.find('*[type="submit"]').next(this.options.errorSelector).text('');
+                                }, this), this.options.hideSuccessAfter * 1000);
+                            }
+                        }
+                    } else {
+                        $(this.options.errorSelector).text(this.options.template.response.success).show();
 
                         if (!!this.options.hideSuccessAfter) {
                             window.setTimeout($.proxy(function(){
-                                this.form.find('*[type="submit"]').next(this.options.errorSelector).text('');
+                                $(this.options.errorSelector).text('');
                             }, this), this.options.hideSuccessAfter * 1000);
                         }
                     }
+
 
                     this.options.onSuccess.call(this, this.args);
                 } else if(response.indexOf('reason=unique') >- 1) {
