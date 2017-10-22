@@ -321,6 +321,9 @@
                 this.form.find('svg path, svg rect').css('fill', this.options.spinner.color);
             }
 
+            // console.log('browser_next_url', this.args.browser_next_url);
+            // return;
+
             // Send the data using CORS
             Jetform.Utils.postCORS(this.options.url, $.param(this.args), $.proxy(function(response){
                 if(response.indexOf('success')>-1){
@@ -355,8 +358,11 @@
                         }
                     }
 
-
                     this.options.onSuccess.call(this, this.args);
+
+                    if (!!this.args.browser_next_url) {
+                        top.location.href = this.args.browser_next_url;
+                    }
                 } else if(response.indexOf('reason=unique') >- 1) {
                     this.options.onFail.call(this, this.options.template.response.unique);
                 } else {
