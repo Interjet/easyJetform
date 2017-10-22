@@ -13,6 +13,7 @@
             url: '//jetform.interjet.co.il/lead/save',
             live: false,
             liveEvent: 'keyup',
+            redirect: false,
             template: {
                 __default: "{$field} מכיל ערך אינו תקין",
                 required: "{$field} שדה חובה",
@@ -360,8 +361,10 @@
 
                     this.options.onSuccess.call(this, this.args);
 
-                    if (!!this.args.browser_next_url) {
-                        top.location.href = this.args.browser_next_url;
+                    if (!!this.options.redirect) {
+                        setTimeout($.proxy(function(){
+                            top.location.href = (typeof this.options.redirect == 'string') ? this.options.redirect : this.options.redirect.path;
+                        }, this), this.options.redirect.delay * 1000 || 0);
                     }
                 } else if(response.indexOf('reason=unique') >- 1) {
                     this.options.onFail.call(this, this.options.template.response.unique);
