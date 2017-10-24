@@ -459,30 +459,32 @@
             function _setStyleDirectionRegExp(element, char) {
                 var rtl = '\u0591-\u07FF\uFB1D-\uFDFF\uFE70-\uFEFC',
                 rx = new RegExp('[' + rtl + ']');
-                if (rx.test(char))
+                if (rx.test(char)) {
                     $(element).css({
                         'text-align': 'right',
                         'direction': 'rtl'
                     });
-                else
+                } else {
                     $(element).css({
                         'text-align': 'left',
                         'direction': 'ltr'
                     });
+                }
             }
 
             function _setStyleDirectionCharCode(element, char) {
                 var CharCode = char.charCodeAt(0);
-                if ((CharCode >= 1488 && CharCode <= 1514) || (CharCode >= 1570 && CharCode <= 1747))
+                if ((CharCode >= 1488 && CharCode <= 1514) || (CharCode >= 1570 && CharCode <= 1747)) {
                     $(element).css({
                         'text-align': 'right',
                         'direction': 'rtl'
                     });
-                else
+                } else {
                     $(element).css({
                         'text-align': 'left',
                         'direction': 'ltr'
                     });
+                }
             }
             return this;
         },
