@@ -132,7 +132,7 @@
                 // Get the fields (In case they where manipulated since the instance was created)
                 this.fields = this.form.find('input, select, textarea');
 
-                this.reset();
+                this.resetErrors();
                 this.validate();
 
                 if(!!this.options.resetErrorEvent) {
@@ -258,7 +258,7 @@
                 }
             }, this));
         },
-        reset: function(){
+        resetErrors: function(){
             this.errors = [];
 
             this.form.find('[aria-invalid="true"]').attr('aria-invalid','false');
@@ -321,9 +321,6 @@
                 // Set the spinner color
                 this.form.find('svg path, svg rect').css('fill', this.options.spinner.color);
             }
-
-            // console.log('browser_next_url', this.args.browser_next_url);
-            // return;
 
             // Send the data using CORS
             Jetform.Utils.postCORS(this.options.url, $.param(this.args), $.proxy(function(response){
@@ -498,6 +495,18 @@
             spinner += '<animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 20 20" to="360 20 20" dur="0.5s" repeatCount="indefinite"/>';
             spinner += '</path></svg></div>';
             return spinner;
+        },
+        reset: function(){
+            // Reset the form
+            this.form.trigger('reset');
+
+            // Reset the errors
+            this.resetErrors();
+
+            // Auto Placeholders
+            if(this.options.autoAlign) {
+                this.inputTextFix();
+            }
         }
     };
 
