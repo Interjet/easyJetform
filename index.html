@@ -133,7 +133,7 @@
                     <input type="hidden" id="browser_next_url" name="browser_next_url" value="http://www.interjet.co.il">
 
 					<button type="submit" class="btn btn-default">שלח</button>
-                    <div class="input-error"></div>
+                    <div class="form-success"></div>
 				</form>
 
 			</div>
@@ -146,13 +146,13 @@
             $('#jetform').jetform({
 				token:'nZq6scKaNvcXdgjszIcN1kaHhbYDKjAAie0yPKyTVU4AiE0Aiv9VGKu0sH7fVqWhqEkRvUyhbApBpYRGmgPkZA==',
 				errorSelector: '.input-error',
-                hideSuccessAfter: 2,
-                redirect: 'http://www.yahoo.com',
+                successSelector: '.form-success',
+                hideSuccessAfter: 3,
 				template:{
 					custom_error: '{$field} בעל הודעה מותאמת'
 				},
 				onSuccess: function(args){
-					console.log(args);
+                    console.log(args);
 				},
 				onError: function(errors){
 					console.log(errors);
