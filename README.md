@@ -1,4 +1,4 @@
-# easyJetform - v3.0.9
+# easyJetform - v3.0.10
 
 Turn any form to a Jetform :)
 [Demo](https://interjet.github.io/easyJetform/).
@@ -37,6 +37,11 @@ beforeSubmit | Triggered before sending the input data to Jetform and after a su
 onSuccess | Triggered after a successful response came from Jetform
 onError | Triggered if errors were found in the form validation
 onFail | Triggered when an invalid response came from Jetform
+
+### Methods
+Name  | Description
+------------- | -------------
+reset | Reset the form and restore the original state of the error messages
 
 ### Validation rules
 Jetform plugin include a validation parser and a custom error message template engine. <br>
@@ -223,4 +228,9 @@ $('form').jetform({
         alert('Ooops... something went wrong');
     }
 })
+```
+
+### Method calling example
+```js
+$('form').jetform('reset');
 ```
