@@ -4,6 +4,7 @@
         this.options = $.extend(true, {
             token: false,
             errorSelector: false,
+            successSelector: false,
             hideSuccessAfter: false,
             autoValidate: false,
             autoSend: false,
@@ -95,7 +96,12 @@
         showAllErrors: false,
         init: function() {
             // Determine the type of error presentation
-            this.showAllErrors = !!this.options.errorSelector && $(this.options.errorSelector).length > 1;
+            this.showAllErrors = !!this.options.errorSelector && this.form.find(this.options.errorSelector).length > 1;
+
+            // Determine the error selectors
+            if(!!this.options.errorSelector && !this.options.successSelector) {
+                this.successSelector = this.options.errorSelector;
+            }
 
             // Add attributes to the base element
             this.form.attr('novalidate', true);
@@ -264,7 +270,7 @@
             this.form.find('[aria-invalid="true"]').attr('aria-invalid','false');
 
             if(!!this.options.errorSelector) {
-                $(this.options.errorSelector).text('');
+                this.form.find(this.options.errorSelector).text('');
             }
         },
         resetFieldError: function(field){
@@ -272,7 +278,7 @@
                 field.closest('div').find(this.options.errorSelector).text('').hide();
                 field.attr('aria-invalid', true);
             } else {
-                $(this.options.errorSelector).text('').hide();
+                this.form.find(this.options.errorSelector).text('').hide();
             }
 
         },
@@ -337,21 +343,21 @@
 
                     // Display the success message
                     if(this.showAllErrors) {
-                        if(this.form.find('*[type="submit"]').next(this.options.errorSelector).length) {
-                            this.form.find('*[type="submit"]').next(this.options.errorSelector).text(this.options.template.response.success).show();
+                        if(this.form.find('*[type="submit"]').next(this.options.successSelector).length) {
+                            this.form.find('*[type="submit"]').next(this.options.successSelector).text(this.options.template.response.success).show();
 
                             if (!!this.options.hideSuccessAfter) {
                                 window.setTimeout($.proxy(function(){
-                                    this.form.find('*[type="submit"]').next(this.options.errorSelector).text('');
+                                    this.form.find('*[type="submit"]').next(this.options.successSelector).text('');
                                 }, this), this.options.hideSuccessAfter * 1000);
                             }
                         }
                     } else {
-                        $(this.options.errorSelector).text(this.options.template.response.success).show();
+                        this.form.find(this.options.successSelector).text(this.options.template.response.success).show();
 
                         if (!!this.options.hideSuccessAfter) {
                             window.setTimeout($.proxy(function(){
-                                $(this.options.errorSelector).text('');
+                                this.form.find(this.options.successSelector).text('');
                             }, this), this.options.hideSuccessAfter * 1000);
                         }
                     }

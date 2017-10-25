@@ -15,7 +15,8 @@ Only inputs with ```name``` property will be processed.
 Name  | Type | Description
 ------------- | ------------- | -------------
 token | String | The authentication token as revieved from Jetform. Default: ''
-errorSelector | String | The element in which the errors will appear. Default: false
+errorSelector | String | The element selector in which the errors will appear. Default: false
+successSelector | String | The element selector in which the success message will appear. Default: false
 hideSuccessAfter | Integer | Number of seconds to display the success message. Default: false
 redirect | Object / String | Redirect to a specific path after a cretin timeout. Default: false
 autoValidate | Boolean | Should perform a validation immediately when an instance is created. Default: false
