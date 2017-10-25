@@ -89,7 +89,7 @@
         this.init();
     };
 
-    Jetform.version = '3.0.9';
+    Jetform.version = '3.0.10';
 
     Jetform.prototype = {
         showAllErrors: false,
@@ -369,11 +369,13 @@
                     this.options.onFail.call(this, this.options.template.response.fail);
                 }
 
-                // Enable the submit button & remove the spinner
-                this.form.find('*[type="submit"]').prop('disabled', false).text(this.form.find('*[type="submit"]').data('value'));
+                // Enable the submit button & remove the spinner if redirect was not defined
+                if (!this.options.redirect) {
+                    this.form.find('*[type="submit"]').prop('disabled', false).text(this.form.find('*[type="submit"]').data('value'));
 
-                if(this.options.spinner.active) {
-                    this.form.find('*[type="submit"]').find('.loader').remove();
+                    if (this.options.spinner.active) {
+                        this.form.find('*[type="submit"]').find('.loader').remove();
+                    }
                 }
 
             }, this));
