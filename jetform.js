@@ -1,6 +1,7 @@
 (function($){
     
     function Jetform(item, options) {
+        this._options = options;
         this.options = $.extend(true, {
             token: false,
             errorSelector: false,
@@ -342,33 +343,7 @@
                     }
 
                     // Display the success message
-                    if(this.showAllErrors) {
-                        if(this.form.find('*[type="submit"]').next(this.options.successSelector).length) {
-                            this.form.find('*[type="submit"]').next(this.options.successSelector).text(this.options.template.response.success).show();
-
-                            if (!!this.options.hideSuccessAfter) {
-                                window.setTimeout($.proxy(function(){
-                                    this.form.find('*[type="submit"]').next(this.options.successSelector).text('');
-                                }, this), this.options.hideSuccessAfter * 1000);
-                            }
-                        }
-                    } else {
-                        this.form.find(this.options.successSelector).text(this.options.template.response.success).show();
-
-                        if (!!this.options.hideSuccessAfter) {
-                            window.setTimeout($.proxy(function(){
-                                this.form.find(this.options.successSelector).text('');
-                            }, this), this.options.hideSuccessAfter * 1000);
-                        }
-                    }
-
-                    this.options.onSuccess.call(this, this.args);
-
-                    if (!!this.options.redirect) {
-                        setTimeout($.proxy(function(){
-                            top.location.href = (typeof this.options.redirect == 'string') ? this.options.redirect : this.options.redirect.path;
-                        }, this), this.options.redirect.delay * 1000 || 0);
-                    }
+                    this.displaySuccess();
                 } else if(response.indexOf('reason=unique') >- 1) {
                     this.options.onFail.call(this, this.options.template.response.unique);
                 } else {
@@ -385,6 +360,47 @@
                 }
 
             }, this));
+        },
+        displaySuccess: function(){
+            if(this.showAllErrors) {
+                if (!!this._options.successSelector) {
+                    if(this.form.find(this.options.successSelector).length) {
+                        this.form.find(this.options.successSelector).text(this.options.template.response.success).show();
+
+                        if (!!this.options.hideSuccessAfter) {
+                            window.setTimeout($.proxy(function(){
+                                this.form.find(this.options.successSelector).text('');
+                            }, this), this.options.hideSuccessAfter * 1000);
+                        }
+                    }
+                } else {
+                    if(this.form.find('*[type="submit"]').next(this.options.successSelector).length) {
+                        this.form.find('*[type="submit"]').next(this.options.successSelector).text(this.options.template.response.success).show();
+
+                        if (!!this.options.hideSuccessAfter) {
+                            window.setTimeout($.proxy(function(){
+                                this.form.find('*[type="submit"]').next(this.options.successSelector).text('');
+                            }, this), this.options.hideSuccessAfter * 1000);
+                        }
+                    }
+                }
+            } else {
+                this.form.find(this.options.successSelector).text(this.options.template.response.success).show();
+
+                if (!!this.options.hideSuccessAfter) {
+                    window.setTimeout($.proxy(function(){
+                        this.form.find(this.options.successSelector).text('');
+                    }, this), this.options.hideSuccessAfter * 1000);
+                }
+            }
+
+            this.options.onSuccess.call(this, this.args);
+
+            if (!!this.options.redirect) {
+                setTimeout($.proxy(function(){
+                    top.location.href = (typeof this.options.redirect == 'string') ? this.options.redirect : this.options.redirect.path;
+                }, this), this.options.redirect.delay * 1000 || 0);
+            }
         },
         displayErrors: function(focus){
             var displayedFields = [];
