@@ -13,6 +13,7 @@
             autoAlign: true,
             telMaxLength: 10,
             url: '//jetform.interjet.co.il/lead/save',
+            requestType: 'text',
             live: false,
             liveEvent: 'keyup',
             redirect: false,
@@ -91,7 +92,7 @@
         this.init();
     };
 
-    Jetform.version = '3.0.10';
+    Jetform.version = '3.0.11';
 
     Jetform.prototype = {
         showAllErrors: false,
@@ -359,7 +360,7 @@
                     }
                 }
 
-            }, this));
+            }, this), this.options.requestType);
         },
         displaySuccess: function(){
             if(this.showAllErrors) {
