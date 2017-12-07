@@ -13,6 +13,7 @@
             autoAlign: true,
             telMaxLength: 10,
             url: '//jetform.interjet.co.il/lead/save',
+            requestType: 'text',
             live: false,
             liveEvent: 'keyup',
             redirect: false,
@@ -64,8 +65,8 @@
             },
             beforeSubmit: function(args){},
             onSuccess: function(args){},
-            onError: function(args){},
-            onFail: function(args){},
+            onError: function(errors){},
+            onFail: function(error){},
         }, options);
 
         this.form = $(item);
@@ -78,6 +79,8 @@
             token: options.token,
             ref: Jetform.Utils.queryString('ref') || '',
             media: Jetform.Utils.queryString('media') || '',
+            L: window.navigator.userLanguage || window.navigator.language,
+            R: screen.width+"x"+screen.height,
             campaign_source: Jetform.Utils.queryString('utm_source') || "",
             campaign_medium: Jetform.Utils.queryString('utm_medium') || "",
             campaign_term: Jetform.Utils.queryString('utm_term') || "",
@@ -91,7 +94,7 @@
         this.init();
     };
 
-    Jetform.version = '3.0.10';
+    Jetform.version = '3.0.11';
 
     Jetform.prototype = {
         showAllErrors: false,
@@ -359,6 +362,8 @@
                     }
                 }
 
+            }, this), this.options.requestType, $.proxy(function(error){
+                this.options.onFail.call(this, error);
             }, this));
         },
         displaySuccess: function(){
@@ -646,9 +651,12 @@
                 }
             },
         },
-        postCORS: function(c, a, b, d) {
+        postCORS: function(c, a, b, d, err) {
             try {
-                jQuery.post(c, a, b, d)
+                jQuery.post(c, a, b, d).fail(function(error) {
+                    var _err = typeof err == 'function' ? err : function(){};
+                    _err.call(this, error);
+                })
             } catch (e) {
                 var f = '';
                 for (key in a) {

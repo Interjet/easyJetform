@@ -154,11 +154,14 @@
 					custom_error: '{$field} בעל הודעה מותאמת'
 				},
 				onSuccess: function(args){
-                    console.log(args);
+                    console.log('onSuccess', args);
 				},
 				onError: function(errors){
-					console.log(errors);
+					console.log('onError', errors);
 				},
+                onFail: function(error){
+                    console.log('onFail', error);
+                },
                 spinner: {
                     active: true,
                     width: '30px',
