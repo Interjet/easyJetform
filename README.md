@@ -1,4 +1,4 @@
-# easyJetform - v3.0.10
+# easyJetform - v3.0.11
 
 Turn any form to a Jetform :)
 [Demo](https://interjet.github.io/easyJetform/).
@@ -27,6 +27,7 @@ liveEvent | String | The event which will trigger the validation on each field. 
 autoAlign | Boolean | Should automatically align the text according to the placeholder's or the value's direction. Default: true
 telMaxLength | Integer | The maximum length of inputs of type tel
 url | String | The URL to which the form should be submited. Default: '//jetform.interjet.co.il/lead/save'
+requestType | String | The type of the HTTP request that should be sent. Default: 'text'
 template | Object | The validation engine messages. You can add new or overwrite the existing messages
 [spinner](#spinner) | Object | Properties for the spinner
 [permit](#permit) | Object | Permission for input characters to a specific input type
@@ -37,7 +38,7 @@ Name  | Description
 beforeSubmit | Triggered before sending the input data to Jetform and after a successful validation
 onSuccess | Triggered after a successful response came from Jetform
 onError | Triggered if errors were found in the form validation
-onFail | Triggered when an invalid response came from Jetform
+onFail | Triggered when an invalid response came from Jetform or a 404 HTTP response status is received 
 
 ### Methods
 Name  | Description
