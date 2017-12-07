@@ -79,6 +79,8 @@
             token: options.token,
             ref: Jetform.Utils.queryString('ref') || '',
             media: Jetform.Utils.queryString('media') || '',
+            L: window.navigator.userLanguage || window.navigator.language,
+            R: screen.width+"x"+screen.height,
             campaign_source: Jetform.Utils.queryString('utm_source') || "",
             campaign_medium: Jetform.Utils.queryString('utm_medium') || "",
             campaign_term: Jetform.Utils.queryString('utm_term') || "",
