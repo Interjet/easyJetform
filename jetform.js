@@ -65,8 +65,8 @@
             },
             beforeSubmit: function(args){},
             onSuccess: function(args){},
-            onError: function(args){},
-            onFail: function(args){},
+            onError: function(errors){},
+            onFail: function(error){},
         }, options);
 
         this.form = $(item);
@@ -362,7 +362,9 @@
                     }
                 }
 
-            }, this), this.options.requestType);
+            }, this), this.options.requestType, $.proxy(function(error){
+                this.options.onFail.call(this, error);
+            }, this));
         },
         displaySuccess: function(){
             if(this.showAllErrors) {
@@ -649,9 +651,12 @@
                 }
             },
         },
-        postCORS: function(c, a, b, d) {
+        postCORS: function(c, a, b, d, err) {
             try {
-                jQuery.post(c, a, b, d)
+                jQuery.post(c, a, b, d).fail(function(error) {
+                    var _err = typeof err == 'function' ? err : function(){};
+                    _err.call(this, error);
+                })
             } catch (e) {
                 var f = '';
                 for (key in a) {
