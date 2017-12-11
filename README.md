@@ -222,7 +222,7 @@ $('form').jetform({
     token:'nZq6scKaNvcXdgjszIcN1kaHhbYDKjAAie0yPKyTVU4AiE0Aiv9VGKu0sH7fVqWhqEkRvUyhbApBpYRGmgPkZA==',
     errorSelector: '.input-error',
     resetErrorEvent: 'keypress',
-    onSuccess: function(args){
+    onSuccess: function(args, response){
         alert('I am the king of the world!');
     },
     onError: function(errors){

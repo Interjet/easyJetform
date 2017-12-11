@@ -64,7 +64,7 @@
                 }
             },
             beforeSubmit: function(args){},
-            onSuccess: function(args){},
+            onSuccess: function(args, response){},
             onError: function(errors){},
             onFail: function(error){},
         }, options);
@@ -347,6 +347,9 @@
 
                     // Display the success message
                     this.displaySuccess();
+
+                    // Trigger the callback
+                    this.options.onSuccess.call(this, this.args, response);
                 } else if(response.indexOf('reason=unique') >- 1) {
                     this.options.onFail.call(this, this.options.template.response.unique);
                 } else {
@@ -398,8 +401,6 @@
                     }, this), this.options.hideSuccessAfter * 1000);
                 }
             }
-
-            this.options.onSuccess.call(this, this.args);
 
             if (!!this.options.redirect) {
                 setTimeout($.proxy(function(){
