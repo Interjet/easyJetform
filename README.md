@@ -1,4 +1,4 @@
-# easyJetform - v3.0.11
+# easyJetform - v3.0.12
 
 Turn any form to a Jetform :)
 [Demo](https://interjet.github.io/easyJetform/).
@@ -29,6 +29,7 @@ telMaxLength | Integer | The maximum length of inputs of type tel
 url | String | The URL to which the form should be submited. Default: '//jetform.interjet.co.il/lead/save'
 requestType | String | The type of the HTTP request that should be sent. Default: 'text'
 template | Object | The validation engine messages. You can add new or overwrite the existing messages
+responses | Array | Array of possible responses definition. See detailed explanation bellow.
 [spinner](#spinner) | Object | Properties for the spinner
 [permit](#permit) | Object | Permission for input characters to a specific input type
 
@@ -174,6 +175,40 @@ Once we finished we can start using out new validation rule: <br>
 
 ### prefix support
 You can merge two inputs by adding ```data-prefix=#prefix-selector``` to the desired input. <br>
+
+### responses
+Array of objects. Each object contain a definition for a possible response <br>.
+The Keys available for each object are:
+Name  | Description
+------------- | -------------
+key | String - For text matching. Function for custom validation, should return boolean 
+gtm_event | String. If defined a GTM event will be triggered with the collected data as variables
+preCallback | String. Internal method to run before calling the callback
+postCallback | String. The callback to run after the rule being matched, as defined in the options
+arguments | Array. Array of public members to pass into the postCallback
+template | String. The template of the response message passed into the postCallback as defined in the options
+
+<br>
+The default values match the responses of the Jetform system since this plugin serves the Jetform platform. <br>
+This dynamic option is to allow users to use the plugin with other platforms. <br>
+
+Defaults: <br> 
+```js
+responses: [
+    {
+        key: 'success',
+        gtm_event: 'jetform_submit_success',
+        preCallback: 'displaySuccess',
+        postCallback: 'onSuccess',
+        arguments: ['args']
+    },
+    {
+        key: 'reason=unique',
+        postCallback: 'onFail',
+        template: 'unique'
+    }
+]
+```
 
 ### spinner
 You can control over the spinner that is shown in the input type submit while the data is being sent to Jetform. <br> 

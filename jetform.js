@@ -63,10 +63,24 @@
                     event: 'keydown keypress'
                 }
             },
+            responses: [
+                {
+                    key: 'success',
+                    gtm_event: 'jetform_submit_success',
+                    preCallback: 'displaySuccess',
+                    postCallback: 'onSuccess',
+                    arguments: ['args']
+                },
+                {
+                    key: 'reason=unique',
+                    postCallback: 'onFail',
+                    template: 'unique'
+                }
+            ],
             beforeSubmit: function(args){},
             onSuccess: function(args, response){},
             onError: function(errors){},
-            onFail: function(error){},
+            onFail: function(error){}
         }, options);
 
         this.form = $(item);
@@ -94,7 +108,7 @@
         this.init();
     };
 
-    Jetform.version = '3.0.11';
+    Jetform.version = '3.0.12';
 
     Jetform.prototype = {
         showAllErrors: false,
@@ -334,25 +348,23 @@
 
             // Send the data using CORS
             Jetform.Utils.postCORS(this.options.url, $.param(this.args), $.proxy(function(response){
-                if(response.indexOf('success')>-1){
-                    if(typeof dataLayer == 'object'){
-                        var layer = $.extend(true, {'event':'jetform_submit_success'}, this.args);
-                        $.each(['L','R','browser_next_url','campaign_content','campaign_medium','campaign_name','campaign_source','campaign_term','furl','source_referrer','token','use_browser'], function(i,v){
-                            if(v in layer)
-                                delete layer[v];
-                        });
-                        
-                        dataLayer.push(layer);
+                var ruleMatched = false;
+                $.each(this.options.responses, $.proxy(function(index, _response){
+                    if($.type(_response.key) === 'string') {
+                        if(response.indexOf(_response.key) > -1){
+                            ruleMatched = true;
+                            this.parseResponse(_response, response);
+                        }
+                    } else if($.type(_response.key) === 'function') {
+                        if(_response.key.call(this, response)) {
+                            ruleMatched = true;
+                            this.parseResponse(_response, response);
+                        }
                     }
-
-                    // Display the success message
-                    this.displaySuccess();
-
-                    // Trigger the callback
-                    this.options.onSuccess.call(this, this.args, response);
-                } else if(response.indexOf('reason=unique') >- 1) {
-                    this.options.onFail.call(this, this.options.template.response.unique);
-                } else {
+                }, this));
+                
+                
+                if(!ruleMatched) {
                     this.options.onFail.call(this, this.options.template.response.fail);
                 }
 
@@ -364,10 +376,37 @@
                         this.form.find('*[type="submit"]').find('.loader').remove();
                     }
                 }
-
             }, this), this.options.requestType, $.proxy(function(error){
                 this.options.onFail.call(this, error);
             }, this));
+        },
+        parseResponse: function(parser, response){
+            var callback_args = [];
+
+            if(!!parser.gtm_event && typeof dataLayer == 'object'){
+                var layer = $.extend(true, {'event':parser.gtm_event}, this.args);
+                $.each(['L','R','browser_next_url','campaign_content','campaign_medium','campaign_name','campaign_source','campaign_term','furl','source_referrer','token','use_browser'], function(i,v){
+                    if(v in layer)
+                        delete layer[v];
+                });
+
+                dataLayer.push(layer);
+            }
+
+            if(!!parser.preCallback) {
+                this[parser.preCallback].call(this);
+            }
+
+            if(!!parser.arguments) {
+                var callback_args = $.map(parser.arguments, $.proxy(function(item, index){
+                    return this[item];
+                }, this));
+                callback_args.push(response);
+            } else if(!!parser.template){
+                callback_args = [this.options.template.response[parser.template]];
+            }
+
+            this.options[parser.postCallback].apply(this, callback_args);
         },
         displaySuccess: function(){
             if(this.showAllErrors) {
