@@ -179,6 +179,7 @@ You can merge two inputs by adding ```data-prefix=#prefix-selector``` to the des
 ### responses
 Array of objects. Each object contain a definition for a possible response <br>.
 The Keys available for each object are:
+
 Name  | Description
 ------------- | -------------
 key | String - For text matching. Function for custom validation, should return boolean 
