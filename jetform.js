@@ -117,7 +117,7 @@
             this.showAllErrors = !!this.options.errorSelector && this.form.find(this.options.errorSelector).length > 1;
 
             // Determine the error selectors
-            if(!!this.options.errorSelector && !this.options.successSelector) {
+            if (!!this.options.errorSelector && !this.options.successSelector && !this.showAllErrors) {
                 this.successSelector = this.options.errorSelector;
             }
 
@@ -166,8 +166,10 @@
                 }
 
                 if(!this.errors.length){
+                    this.form.attr('aria-invalid', false);
                     this.send();
                 } else {
+                    this.form.attr('aria-invalid', true);
                     this.displayErrors(true);
                     this.options.onError.call(this, this.errors);
                 }
@@ -185,7 +187,6 @@
                             }
                         }, this));
                     }
-
 
                     this.resetFieldError($(event.target));
                     this.validateField(e.target);
@@ -409,33 +410,13 @@
             this.options[parser.postCallback].apply(this, callback_args);
         },
         displaySuccess: function(){
-            if(this.showAllErrors) {
-                if (!!this._options.successSelector) {
-                    if(this.form.find(this.options.successSelector).length) {
-                        this.form.find(this.options.successSelector).text(this.options.template.response.success).show();
-
-                        if (!!this.options.hideSuccessAfter) {
-                            window.setTimeout($.proxy(function(){
-                                this.form.find(this.options.successSelector).text('');
-                            }, this), this.options.hideSuccessAfter * 1000);
-                        }
-                    }
-                } else {
-                    if(this.form.find('*[type="submit"]').next(this.options.successSelector).length) {
-                        this.form.find('*[type="submit"]').next(this.options.successSelector).text(this.options.template.response.success).show();
-
-                        if (!!this.options.hideSuccessAfter) {
-                            window.setTimeout($.proxy(function(){
-                                this.form.find('*[type="submit"]').next(this.options.successSelector).text('');
-                            }, this), this.options.hideSuccessAfter * 1000);
-                        }
-                    }
-                }
-            } else {
+            if (!this.options.successSelector) {
+                alert(this.options.template.response.success);
+            } else{
                 this.form.find(this.options.successSelector).text(this.options.template.response.success).show();
 
                 if (!!this.options.hideSuccessAfter) {
-                    window.setTimeout($.proxy(function(){
+                    window.setTimeout($.proxy(function () {
                         this.form.find(this.options.successSelector).text('');
                     }, this), this.options.hideSuccessAfter * 1000);
                 }
