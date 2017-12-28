@@ -460,7 +460,6 @@
             }, this));
 
             if(!!focus) {
-                // Focus the first field
                 this.errors[0].field.focus();
             }
         },
