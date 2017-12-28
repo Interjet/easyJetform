@@ -338,7 +338,7 @@
             // Disable the submit button and add a spinner
             this.form.find('*[type="submit"]').prop('disabled', true).data('value', this.form.find('*[type="submit"]').text()).text(this.options.template.response.sending);
             
-            if(this.options.spinner.active){
+            if(this.options.spinner === false){
                 // Append the spinner
                 this.form.find('*[type="submit"]').append(this.getSpinner());
 
