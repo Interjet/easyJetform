@@ -488,6 +488,8 @@
             isTestRegExpSupported = ('test' in RegExp.prototype);
             
             jQuery.each(this.fields, function(index, element) {
+                if(!jQuery(element).is('input, textarea')) return;
+
                 if (!!jQuery(element).attr('placeholder')) {
                     if (!!isRegExpSupported && !!isTestRegExpSupported)
                         _setStyleDirectionRegExp(element, jQuery(element).attr('placeholder').substr(0, 1));
