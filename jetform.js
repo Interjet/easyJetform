@@ -488,7 +488,7 @@
             isTestRegExpSupported = ('test' in RegExp.prototype);
             
             jQuery.each(this.fields, function(index, element) {
-                if(!jQuery(element).is('input, textarea')) return;
+                if(!jQuery(element).is('input:not([type="checkbox"]):not([type="radio"]), textarea')) return;
 
                 if (!!jQuery(element).attr('placeholder')) {
                     if (!!isRegExpSupported && !!isTestRegExpSupported)
