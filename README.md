@@ -1,4 +1,4 @@
-# easyJetform - v3.0.15
+# easyJetform - v3.0.16
 
 Turn any form to a Jetform :)
 [Demo](https://interjet.github.io/easyJetform/).
@@ -27,6 +27,7 @@ liveEvent | String | The event which will trigger the validation on each field. 
 autoAlign | Boolean | Should automatically align the text according to the placeholder's or the value's direction. Default: true
 telMaxLength | Integer | The maximum length of inputs of type tel
 url | String | The URL to which the form should be submited. Default: '//jetform.interjet.co.il/lead/save'
+privacyMode | Boolean | Removes identifiable metadata. default: false
 requestType | String | The type of the HTTP request that should be sent. Default: 'text'
 template | Object | The validation engine messages. You can add new or overwrite the existing messages
 responses | Array | Array of possible responses definition. See detailed explanation bellow.

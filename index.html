@@ -130,12 +130,12 @@
 					</div>
 
 					<input type="hidden" name="jf_txt_10" value="שדה בלתי ניראה">
-                    <input type="hidden" id="browser_next_url" name="browser_next_url" value="http://www.interjet.co.il">
+					<input type="hidden" id="browser_next_url" name="browser_next_url" value="http://www.interjet.co.il">
 
 					<div class="form-group">
-                        <button type="submit" class="btn btn-default">שלח</button>
-                    </div>
-                    <div class="form-success"></div>
+							<button type="submit" class="btn btn-default">שלח</button>
+					</div>
+					<div class="form-success"></div>
 				</form>
 
 			</div>
@@ -145,29 +145,30 @@
 	<script>
 		$(document).ready(function(){
 
-            $('#jetform').jetform({
+			$('#jetform').jetform({
 				token:'nZq6scKaNvcXdgjszIcN1kaHhbYDKjAAie0yPKyTVU4AiE0Aiv9VGKu0sH7fVqWhqEkRvUyhbApBpYRGmgPkZA==',
 				errorSelector: '.input-error',
-                successSelector: '.form-success',
-                hideSuccessAfter: 3,
+				successSelector: '.form-success',
+				hideSuccessAfter: 3,
+				privacyMode: true,
 				template:{
 					custom_error: '{$field} בעל הודעה מותאמת'
 				},
 				onSuccess: function(args){
-                    console.log('onSuccess', args);
+					console.log('onSuccess', args);
 				},
 				onError: function(errors){
 					console.log('onError', errors);
 				},
-                onFail: function(error){
-                    console.log('onFail', error);
-                },
-                spinner: {
-                    active: true,
-                    width: '30px',
-                    height: '20px',
-                    color: '#333'
-                }
+				onFail: function(error){
+					console.log('onFail', error);
+				},
+				spinner: {
+					active: true,
+					width: '30px',
+					height: '20px',
+					color: '#333'
+				}
 			});
 		});
 	</script>

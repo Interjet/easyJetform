@@ -17,6 +17,7 @@
             live: false,
             liveEvent: 'keyup',
             redirect: false,
+            privacyMode: false,
             template: {
                 __default: "{$field} מכיל ערך אינו תקין",
                 required: "{$field} שדה חובה",
@@ -94,7 +95,7 @@
             ref: Jetform.Utils.queryString('ref') || '',
             media: Jetform.Utils.queryString('media') || '',
             L: window.navigator.userLanguage || window.navigator.language,
-            R: screen.width+"x"+screen.height,
+            R: screen.width + "x" + screen.height,
             campaign_source: Jetform.Utils.queryString('utm_source') || "",
             campaign_medium: Jetform.Utils.queryString('utm_medium') || "",
             campaign_term: Jetform.Utils.queryString('utm_term') || "",
@@ -108,7 +109,7 @@
         this.init();
     };
 
-    Jetform.version = '3.0.15';
+    Jetform.version = '3.0.16';
 
     Jetform.prototype = {
         showAllErrors: false,
@@ -316,6 +317,12 @@
                 }
             }, this));
         },
+        filterPrivacyData() {
+            if (this.options.privacyMode) {
+                delete this.args.L;
+                delete this.args.R;   
+            }
+        },
         send: function() {
             // Collect the input data
             this.collectInputData();
@@ -327,6 +334,9 @@
 
             // Collect the input data
             this.collectInputData();
+            
+            // Filter out identifiable metadata
+            this.filterPrivacyData();
 
             // Reset the form
             this.form.trigger('reset');
