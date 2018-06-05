@@ -317,7 +317,7 @@
                 }
             }, this));
         },
-        filterPrivacyData() {
+        filterPrivacyData: function() {
             if (this.options.privacyMode) {
                 delete this.args.L;
                 delete this.args.R;   
