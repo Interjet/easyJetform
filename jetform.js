@@ -101,15 +101,16 @@
             campaign_term: Jetform.Utils.queryString('utm_term') || "",
             campaign_content: Jetform.Utils.queryString('utm_content') || "",
             campaign_name: Jetform.Utils.queryString('utm_campaign') || "",
+            source_referrer: window.document.referrer,
             furl: document.location.href
         };
 
         this.errors = [];
 
         this.init();
-    };
+    }
 
-    Jetform.version = '3.0.16';
+    Jetform.version = '3.0.17';
 
     Jetform.prototype = {
         showAllErrors: false,
@@ -769,7 +770,7 @@
                 }
             }
         });
-    }
+    };
 
     window.Jetform = Jetform;
 
