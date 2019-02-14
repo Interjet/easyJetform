@@ -43,7 +43,7 @@
                     sending: "שולח נתונים",
                     success: "הפרטים התקבלו בהצלחה",
                     fail: "ארעה שגיאה בזמן שליחת הנתונים",
-                    unique: "ניתן להירשם פעם אחת בלבד",
+                    unique: "ניתן להירשם פעם אחת בלבד"
                 }
             },
             spinner: {
@@ -65,18 +65,18 @@
                 }
             },
             responses: [
-            {
-                key: 'success',
-                gtm_event: 'jetform_submit_success',
-                preCallback: 'displaySuccess',
-                postCallback: 'onSuccess',
-                arguments: ['args']
-            },
-            {
-                key: 'reason=unique',
-                postCallback: 'onFail',
-                template: 'unique'
-            }
+                {
+                    key: 'success',
+                    gtm_event: 'jetform_submit_success',
+                    preCallback: 'displaySuccess',
+                    postCallback: 'onSuccess',
+                    arguments: ['args']
+                },
+                {
+                    key: 'reason=unique',
+                    postCallback: 'onFail',
+                    template: 'unique'
+                }
             ],
             beforeSubmit: function(args){},
             onSuccess: function(args, response){},
@@ -85,7 +85,7 @@
         }, options);
 
         this.form = jQuery(item);
-        
+
         this.fields = this.form.find('input, select, textarea').not(function(index, input){
             return !jQuery(input).attr('name');
         });
@@ -312,7 +312,7 @@
                 } else{
                     if(jQuery(field).data('prefix')){
                         this.args[jQuery(field).attr('name')] = jQuery(field).val().replace(/^/,jQuery(jQuery(field).data('prefix')).val());
-                    } else{   
+                    } else{
                         this.args[jQuery(field).attr('name')] = jQuery(field).val();
                     }
                 }
@@ -321,7 +321,7 @@
         filterPrivacyData: function() {
             if (this.options.privacyMode) {
                 delete this.args.L;
-                delete this.args.R;   
+                delete this.args.R;
             }
         },
         send: function() {
@@ -335,7 +335,7 @@
 
             // Collect the input data
             this.collectInputData();
-            
+
             // Filter out identifiable metadata
             this.filterPrivacyData();
 
@@ -349,7 +349,7 @@
 
             // Disable the submit button and add a spinner
             this.form.find('*[type="submit"]').prop('disabled', true).data('value', this.form.find('*[type="submit"]').html()).html(this.options.template.response.sending);
-            
+
             if(this.options.spinner && this.options.spinner.active === true){
                 // Append the spinner
                 this.form.find('*[type="submit"]').append(this.getSpinner());
@@ -374,8 +374,8 @@
                         }
                     }
                 }, this));
-                
-                
+
+
                 if(!ruleMatched) {
                     this.options.onFail.call(this, this.options.template.response.fail);
                 }
@@ -496,8 +496,8 @@
         },
         inputTextFix: function(){
             var isRegExpSupported = ('RegExp' in window),
-            isTestRegExpSupported = ('test' in RegExp.prototype);
-            
+                isTestRegExpSupported = ('test' in RegExp.prototype);
+
             jQuery.each(this.fields, function(index, element) {
                 if (!!jQuery(element).attr('placeholder')) {
                     if (!!isRegExpSupported && !!isTestRegExpSupported)
@@ -524,7 +524,7 @@
 
             function _setStyleDirectionRegExp(element, char) {
                 var rtl = '\u0591-\u07FF\uFB1D-\uFDFF\uFE70-\uFEFC',
-                rx = new RegExp('[' + rtl + ']');
+                    rx = new RegExp('[' + rtl + ']');
                 if (rx.test(char)) {
                     jQuery(element).css({
                         'text-align': 'right',
@@ -581,8 +581,8 @@
     Jetform.Utils = {
         queryString: function(a, b) {
             var c = "",
-            d = [],
-            e = [];
+                d = [],
+                e = [];
             c = b || decodeURIComponent(window.location.hash.length ? window.location.search.substring(1) + window.location.hash : window.location.search.substring(1)), c.indexOf("&") == -1 ? d.push(c) : d = c.split("&");
             for (var f = 0; f < d.length; f++)
                 if (e = d[f].split("="), e[0].toLowerCase() == a.toLowerCase()) return e[1];
@@ -644,7 +644,7 @@
 
                     mone += incNum;
                 }
-                
+
                 return mone % 10 == 0;
             },
             alpha: function(element){
@@ -686,11 +686,20 @@
                 } else {
                     return element.val().split(' ').length <= value;
                 }
-            },
+            }
         },
         postCORS: function(c, a, b, d, err) {
             try {
-                jQuery.post(c, a, b, d).fail(function(error) {
+                jQuery.ajax({
+                    url: c,
+                    type: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    dataType: d,
+                    data: a,
+                    success: b
+                }).fail(function(error) {
                     var _err = typeof err == 'function' ? err : function(){};
                     _err.call(this, error);
                 })
@@ -702,6 +711,7 @@
                 if (jQuery.browser.msie && window.XDomainRequest) {
                     var h = new XDomainRequest();
                     h.open("post", c);
+                    h.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
                     h.send(f);
                     h.onload = function() {
                         b(h.responseText, 'success')
@@ -711,6 +721,7 @@
                         request = new proxy_xmlhttp();
                         request.open('POST', c, true);
                         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                        request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
                         request.send(f)
                     } catch (e) {}
                 }

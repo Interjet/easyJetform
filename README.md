@@ -1,4 +1,4 @@
-# easyJetform - v3.0.16
+# easyJetform - v3.0.17
 
 Turn any form to a Jetform :)
 [Demo](https://interjet.github.io/easyJetform/).
